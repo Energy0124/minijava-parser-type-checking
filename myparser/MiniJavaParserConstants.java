@@ -85,13 +85,27 @@ public interface MiniJavaParserConstants {
   /** RegularExpression Id. */
   int VOID = 42;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 43;
+  int OR = 43;
   /** RegularExpression Id. */
-  int IDENTIFIER = 44;
+  int DIVISION = 44;
   /** RegularExpression Id. */
-  int LETTER = 45;
+  int EXPONENTIAL = 45;
   /** RegularExpression Id. */
-  int DIGIT = 46;
+  int FOR = 46;
+  /** RegularExpression Id. */
+  int INTEGER_LITERAL = 47;
+  /** RegularExpression Id. */
+  int DECIMAL_LITERAL = 48;
+  /** RegularExpression Id. */
+  int HEX_LITERAL = 49;
+  /** RegularExpression Id. */
+  int OCTAL_LITERAL = 50;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 51;
+  /** RegularExpression Id. */
+  int LETTER = 52;
+  /** RegularExpression Id. */
+  int DIGIT = 53;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -141,7 +155,14 @@ public interface MiniJavaParserConstants {
     "\"true\"",
     "\"System.out.println\"",
     "\"void\"",
+    "\"||\"",
+    "\"/\"",
+    "\"**\"",
+    "\"for\"",
     "<INTEGER_LITERAL>",
+    "<DECIMAL_LITERAL>",
+    "<HEX_LITERAL>",
+    "<OCTAL_LITERAL>",
     "<IDENTIFIER>",
     "<LETTER>",
     "<DIGIT>",
