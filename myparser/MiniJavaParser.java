@@ -529,7 +529,7 @@ public class MiniJavaParser implements MiniJavaParserConstants {
   }
 
   static final public StmtExprList StmtExprList() throws ParseException {
-  StmtExprList l;
+  StmtExprList l = new StmtExprList();
   StmtExpr e;
     e = StmtExpr();
     l.addElement(e);
@@ -553,13 +553,14 @@ public class MiniJavaParser implements MiniJavaParserConstants {
 
   static final public StmtExpr StmtExpr() throws ParseException {
   Identifier i;
-  Expression e1;
-  Expression e2;
+  Exp e;
+  Exp e1;
+  Exp e2;
     if (jj_2_8(2147483647)) {
       i = Identifier();
       jj_consume_token(ASSIGN);
-      e1 = Expression();
-    {if (true) return AssginExpr(i, e1);}
+      e = Expression();
+    {if (true) return new AssignExpr(i, e);}
     } else if (jj_2_9(2147483647)) {
       i = Identifier();
       jj_consume_token(LSQPAREN);
@@ -567,7 +568,7 @@ public class MiniJavaParser implements MiniJavaParserConstants {
       jj_consume_token(RSQPAREN);
       jj_consume_token(ASSIGN);
       e2 = Expression();
-    {if (true) return ArrayAssginExpr(i, e1, e2);}
+    {if (true) return new ArrayAssignExpr(i, e1, e2);}
     } else {
       jj_consume_token(-1);
       throw new ParseException();
@@ -576,11 +577,11 @@ public class MiniJavaParser implements MiniJavaParserConstants {
   }
 
   static final public LocalVariableDeclList LocalVariableDeclaration() throws ParseException {
-  LocalVariableDeclList l;
+  LocalVariableDeclList l = new LocalVariableDeclList();
   LocalVariableDecl d1;
   LocalVariableDecl d2;
     d1 = LocalVariableDeclarationFirst();
-    l.addElements(d1);
+    l.addElement(d1);
     label_11:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -592,7 +593,7 @@ public class MiniJavaParser implements MiniJavaParserConstants {
         break label_11;
       }
       d2 = LocalVariableDeclarationRest(d1.t);
-      l.addElements(d2);
+      l.addElement(d2);
     }
     {if (true) return l;}
     throw new Error("Missing return statement in function");
@@ -601,23 +602,23 @@ public class MiniJavaParser implements MiniJavaParserConstants {
   static final public LocalVariableDecl LocalVariableDeclarationFirst() throws ParseException {
   Type t;
   Identifier i;
-  Expression e;
+  Exp e;
     t = Type();
     i = Identifier();
     jj_consume_token(ASSIGN);
     e = Expression();
-    {if (true) return LocalVariableDecl(t, i, e);}
+    {if (true) return new LocalVariableDecl(t, i, e);}
     throw new Error("Missing return statement in function");
   }
 
   static final public LocalVariableDecl LocalVariableDeclarationRest(Type t) throws ParseException {
   Identifier i;
-  Expression e;
+  Exp e;
     jj_consume_token(54);
-    Identifier();
+    i = Identifier();
     jj_consume_token(ASSIGN);
-    Expression();
-    {if (true) return LocalVariableDecl(t, i, e);}
+    e = Expression();
+    {if (true) return new LocalVariableDecl(t, i, e);}
     throw new Error("Missing return statement in function");
   }
 
@@ -673,7 +674,8 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     e1 = PrimaryExpression();
     jj_consume_token(EXPONENTIAL);
     e2 = PrimaryExpression();
-
+    {if (true) return new Exponential(e1, e2);}
+    throw new Error("Missing return statement in function");
   }
 
   static final public Exp OrExpression() throws ParseException {
@@ -681,7 +683,8 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     e1 = PrimaryExpression();
     jj_consume_token(OR);
     e2 = PrimaryExpression();
-
+    {if (true) return new Or(e1, e2);}
+    throw new Error("Missing return statement in function");
   }
 
   static final public Exp DivisionExpression() throws ParseException {
@@ -689,7 +692,8 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     e1 = PrimaryExpression();
     jj_consume_token(DIVISION);
     e2 = PrimaryExpression();
-
+    {if (true) return new Divides(e1, e2);}
+    throw new Error("Missing return statement in function");
   }
 
   static final public Exp AndExpression() throws ParseException {
@@ -866,7 +870,8 @@ public class MiniJavaParser implements MiniJavaParserConstants {
   Exp e;
     jj_consume_token(MINUS);
     e = Expression();
-
+    {if (true) return new UnaryMinus(e);}
+    throw new Error("Missing return statement in function");
   }
 
   static final public Exp IntegerLiteral() throws ParseException {
@@ -1161,13 +1166,13 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3_2() {
-    if (jj_3R_14()) return true;
+  static private boolean jj_3R_32() {
+    if (jj_3R_44()) return true;
     return false;
   }
 
-  static private boolean jj_3R_32() {
-    if (jj_3R_44()) return true;
+  static private boolean jj_3_2() {
+    if (jj_3R_14()) return true;
     return false;
   }
 
@@ -1219,14 +1224,14 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_17() {
-    if (jj_3R_19()) return true;
-    if (jj_scan_token(LSQPAREN)) return true;
+  static private boolean jj_3R_29() {
+    if (jj_3R_41()) return true;
     return false;
   }
 
-  static private boolean jj_3R_29() {
-    if (jj_3R_41()) return true;
+  static private boolean jj_3R_17() {
+    if (jj_3R_19()) return true;
+    if (jj_scan_token(LSQPAREN)) return true;
     return false;
   }
 
@@ -1491,14 +1496,14 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_35() {
-    if (jj_scan_token(INTEGER)) return true;
-    return false;
-  }
-
   static private boolean jj_3_8() {
     if (jj_3R_19()) return true;
     if (jj_scan_token(ASSIGN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_35() {
+    if (jj_scan_token(INTEGER)) return true;
     return false;
   }
 
@@ -1533,18 +1538,18 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_15() {
-    if (jj_scan_token(INTEGER)) return true;
-    if (jj_scan_token(LSQPAREN)) return true;
-    if (jj_scan_token(RSQPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_42() {
     if (jj_scan_token(NEW)) return true;
     if (jj_3R_19()) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_scan_token(RPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_15() {
+    if (jj_scan_token(INTEGER)) return true;
+    if (jj_scan_token(LSQPAREN)) return true;
+    if (jj_scan_token(RSQPAREN)) return true;
     return false;
   }
 

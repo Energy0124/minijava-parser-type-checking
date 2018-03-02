@@ -593,7 +593,7 @@ ForInit ForInit() :
 
 StmtExprList StmtExprList() :
 {
-  StmtExprList l;
+  StmtExprList l = new StmtExprList();
   StmtExpr e;
 }
 {
@@ -615,38 +615,39 @@ StmtExprList StmtExprList() :
 StmtExpr StmtExpr() :
 {
   Identifier i;
-  Expression e1;
-  Expression e2;
+  Exp e;
+  Exp e1;
+  Exp e2;
 }
 {
   LOOKAHEAD(Identifier() "=")
-  i = Identifier() "=" e1 = Expression()
+  i = Identifier() "=" e = Expression()
   {
-    return AssginExpr(i, e1);
+    return new AssignExpr(i, e);
   }
 | 
   LOOKAHEAD(Identifier() "[")
   i = Identifier() "[" e1 = Expression() "]" "=" e2 = Expression()
   {
-    return ArrayAssginExpr(i, e1, e2);
+    return new ArrayAssignExpr(i, e1, e2);
   }
 }
 
 LocalVariableDeclList LocalVariableDeclaration() :
 {
-  LocalVariableDeclList l;
+  LocalVariableDeclList l = new LocalVariableDeclList();
   LocalVariableDecl d1;
   LocalVariableDecl d2;
 }
 {
   d1 = LocalVariableDeclarationFirst()
   {
-    l.addElements(d1);
+    l.addElement(d1);
   }
   (
     d2 = LocalVariableDeclarationRest(d1.t)
     {
-      l.addElements(d2);
+      l.addElement(d2);
     }
   )*
   {
@@ -658,24 +659,24 @@ LocalVariableDecl LocalVariableDeclarationFirst() :
 {
   Type t;
   Identifier i;
-  Expression e;
+  Exp e;
 }
 {
   t = Type() i = Identifier() "=" e = Expression()
   {
-    return LocalVariableDecl(t, i, e);
+    return new LocalVariableDecl(t, i, e);
   }
 }
 
 LocalVariableDecl LocalVariableDeclarationRest(Type t) :
 {
   Identifier i;
-  Expression e;
+  Exp e;
 }
 {
-  "," Identifier() "=" Expression()
+  "," i = Identifier() "=" e = Expression()
   {
-    return LocalVariableDecl(t, i, e);
+    return new LocalVariableDecl(t, i, e);
   }
 }
 
@@ -732,7 +733,7 @@ Exp ExponentialExpression() :
 {
   e1 = PrimaryExpression() "**" e2 = PrimaryExpression()
   {
-  //    return new Exponential(e1, e2);
+    return new Exponential(e1, e2);
   }
 }
 
@@ -743,7 +744,7 @@ Exp OrExpression() :
 {
   e1 = PrimaryExpression() "||" e2 = PrimaryExpression()
   {
-  //    return new Or(e1, e2);
+    return new Or(e1, e2);
   }
 }
 
@@ -754,7 +755,7 @@ Exp DivisionExpression() :
 {
   e1 = PrimaryExpression() "/" e2 = PrimaryExpression()
   {
-  //    return new Divides(e1, e2);
+    return new Divides(e1, e2);
   }
 }
 
@@ -924,7 +925,7 @@ Exp UnaryMinusExpression() :
 {
   "-" e = Expression()
   {
-  //    return new UnaryMinus(e);
+    return new UnaryMinus(e);
   }
 }
 
