@@ -20,4 +20,14 @@ public class StmtExprList extends ForInit {
 	public int size() {
 		return list.size();
 	}
+
+	@Override
+	public boolean hasType() {
+		return false;
+	}
+
+	@Override
+	public Type type() {
+		return null;
+	}
 }

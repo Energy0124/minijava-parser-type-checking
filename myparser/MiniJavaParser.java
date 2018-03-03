@@ -577,10 +577,11 @@ public class MiniJavaParser implements MiniJavaParserConstants {
   }
 
   static final public LocalVariableDeclList LocalVariableDeclaration() throws ParseException {
-  LocalVariableDeclList l = new LocalVariableDeclList();
+  LocalVariableDeclList l;
   LocalVariableDecl d1;
   LocalVariableDecl d2;
     d1 = LocalVariableDeclarationFirst();
+    l = new LocalVariableDeclList(d1.t);
     l.addElement(d1);
     label_11:
     while (true) {
@@ -1171,14 +1172,14 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3_2() {
-    if (jj_3R_14()) return true;
-    return false;
-  }
-
   static private boolean jj_3_17() {
     if (jj_3R_20()) return true;
     if (jj_scan_token(EXPONENTIAL)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_2() {
+    if (jj_3R_14()) return true;
     return false;
   }
 
@@ -1229,15 +1230,15 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_17() {
-    if (jj_3R_19()) return true;
-    if (jj_scan_token(LSQPAREN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_14() {
     if (jj_3R_20()) return true;
     if (jj_scan_token(MINUS)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_17() {
+    if (jj_3R_19()) return true;
+    if (jj_scan_token(LSQPAREN)) return true;
     return false;
   }
 
@@ -1333,15 +1334,15 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_16() {
-    if (jj_3R_19()) return true;
-    if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
   static private boolean jj_3_10() {
     if (jj_3R_20()) return true;
     if (jj_scan_token(55)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_16() {
+    if (jj_3R_19()) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
@@ -1355,14 +1356,14 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_14() {
-    if (jj_3R_18()) return true;
-    if (jj_3R_19()) return true;
+  static private boolean jj_3R_48() {
+    if (jj_3R_60()) return true;
     return false;
   }
 
-  static private boolean jj_3R_48() {
-    if (jj_3R_60()) return true;
+  static private boolean jj_3R_14() {
+    if (jj_3R_18()) return true;
+    if (jj_3R_19()) return true;
     return false;
   }
 
@@ -1464,15 +1465,15 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_36() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_68() {
     if (jj_3R_20()) return true;
     if (jj_scan_token(DOT)) return true;
     if (jj_scan_token(LENGTH)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_36() {
+    if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
@@ -1502,16 +1503,16 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_35() {
-    if (jj_scan_token(INTEGER)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_67() {
     if (jj_3R_20()) return true;
     if (jj_scan_token(LSQPAREN)) return true;
     if (jj_3R_20()) return true;
     if (jj_scan_token(RSQPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_35() {
+    if (jj_scan_token(INTEGER)) return true;
     return false;
   }
 
@@ -1565,17 +1566,17 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3R_23() {
-    if (jj_3R_35()) return true;
-    return false;
-  }
-
   static private boolean jj_3R_21() {
     if (jj_scan_token(NEW)) return true;
     if (jj_scan_token(INTEGER)) return true;
     if (jj_scan_token(LSQPAREN)) return true;
     if (jj_3R_46()) return true;
     if (jj_scan_token(RSQPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_23() {
+    if (jj_3R_35()) return true;
     return false;
   }
 
@@ -1589,16 +1590,16 @@ public class MiniJavaParser implements MiniJavaParserConstants {
     return false;
   }
 
-  static private boolean jj_3_7() {
-    if (jj_3R_19()) return true;
-    if (jj_scan_token(ASSIGN)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_62() {
     if (jj_3R_20()) return true;
     if (jj_scan_token(PLUS)) return true;
     if (jj_3R_20()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_7() {
+    if (jj_3R_19()) return true;
+    if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 

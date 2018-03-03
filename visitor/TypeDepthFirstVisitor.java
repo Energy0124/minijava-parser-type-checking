@@ -310,4 +310,20 @@ public class TypeDepthFirstVisitor implements TypeVisitor {
 		n.e.accept(this);
 		return null;
 	}
+
+	@Override
+	public Type visit(For n) {
+        if (n.f.hasType()){
+            n.f.type().accept(this);
+        }
+		for (int i = 0; i < n.f.size(); i++) {
+			n.f.elementAt(i).accept(this);
+		}
+		n.e.accept(this);
+		for (int i = 0; i < n.l.size(); i++) {
+			n.l.elementAt(i).accept(this);
+		}
+		n.s.accept(this);
+		return null;
+	}
 }

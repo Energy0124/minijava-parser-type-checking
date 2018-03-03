@@ -635,13 +635,14 @@ StmtExpr StmtExpr() :
 
 LocalVariableDeclList LocalVariableDeclaration() :
 {
-  LocalVariableDeclList l = new LocalVariableDeclList();
+  LocalVariableDeclList l;
   LocalVariableDecl d1;
   LocalVariableDecl d2;
 }
 {
   d1 = LocalVariableDeclarationFirst()
   {
+    l = new LocalVariableDeclList(d1.t);
     l.addElement(d1);
   }
   (
