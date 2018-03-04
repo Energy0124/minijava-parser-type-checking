@@ -53,49 +53,56 @@ SPECIAL_TOKEN : /* COMMENTS */
     "/" >
 }
 
-TOKEN :
+TOKEN : /* SEPARATORS */
 {
   < LPAREN : "(" >
 | < RPAREN : ")" >
-| < LSQPAREN : "[" >
-| < RSQPAREN : "]" >
 | < LBRACE : "{" >
 | < RBRACE : "}" >
+| < LBRACKET : "[" >
+| < RBRACKET : "]" >
 | < SEMICOLON : ";" >
+| < COMMA : "," >
 | < DOT : "." >
-| < ASSIGN : "=" >
+}
+
+TOKEN : /* OPERATORS */
+{
+  < BANG : "!" >
+| < EXPONENTIAL : "**" >
+| < DIVISION : "/" >
+| < STAR : "*" >
 | < LT : "<" >
+| < OR : "||" >
+| < SC_AND : "&&" >
 | < PLUS : "+" >
 | < MINUS : "-" >
-| < AND : "&" >
-| < NOT : "!" >
-| < BOOLEAN : "boolean" >
+| < ASSIGN : "=" >
+}
+
+/* RESERVED WORDS AND LITERALS */
+
+TOKEN :
+{
+  < BOOLEAN : "boolean" >
 | < CLASS : "class" >
-| < INTERFACE : "interface" >
 | < ELSE : "else" >
 | < EXTENDS : "extends" >
 | < FALSE : "false" >
 | < IF : "if" >
-| < WHILE : "while" >
-| < INTEGER : "int" >
-| < LENGTH : "length" >
-| < MAIN : "main" >
+| < INT : "int" >
 | < NEW : "new" >
 | < PUBLIC : "public" >
 | < RETURN : "return" >
 | < STATIC : "static" >
-| < STRING : "String" >
 | < THIS : "this" >
 | < TRUE : "true" >
-| < PRINT : "System.out.println" >
 | < VOID : "void" >
-}
-
-TOKEN :
-{
-  < OR : "||" >
-| < DIVISION : "/" >
-| < EXPONENTIAL : "**" >
+| < WHILE : "while" >
+| < PRINT : "System.out.println" >
+| < MAIN : "main" >
+| < STRING : "String" >
+| < LENGTH : "length" >
 | < FOR : "for" >
 }
 
@@ -687,76 +694,62 @@ Exp Expression() :
 }
 {
   (
-    LOOKAHEAD(PrimaryExpression() "&&")
-    e = AndExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "||")
     e = OrExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "<")
-    e = CompareExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "+")
-    e = PlusExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "-")
-    e = MinusExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "/")
-    e = DivisionExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "*")
-    e = TimesExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "**")
-    e = ExponentialExpression()
-  | 
-    LOOKAHEAD(PrimaryExpression() "[")
-    e = ArrayLookup()
-  | 
-    LOOKAHEAD(PrimaryExpression() "." "length")
-    e = ArrayLength()
-  | 
-    LOOKAHEAD(PrimaryExpression() "." Identifier() "(")
-    e = MessageSend()
-  | 
-    e = PrimaryExpression()
+    //    LOOKAHEAD(PrimaryExpression() "&&")
+    //    e = AndExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "||")
+    //    e = OrExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "<")
+    //    e = CompareExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "+")
+    //    e = PlusExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "-")
+    //    e = MinusExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "/")
+    //    e = DivisionExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "*")
+    //    e = TimesExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "**")
+    //    e = ExponentialExpression()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "[")
+    //    e = ArrayLookup()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "." "length")
+    //    e = ArrayLength()
+    //  | 
+    //    LOOKAHEAD(PrimaryExpression() "." Identifier() "(")
+    //    e = MessageSend()
+    //  | 
+    //    e = PrimaryExpression()
   )
   {
     return e;
   }
 }
 
-Exp ExponentialExpression() :
-{
-  Exp e1, e2;
-}
-{
-  e1 = PrimaryExpression() "**" e2 = PrimaryExpression()
-  {
-    return new Exponential(e1, e2);
-  }
-}
-
 Exp OrExpression() :
 {
   Exp e1, e2;
+  Exp r;
 }
 {
-  e1 = PrimaryExpression() "||" e2 = PrimaryExpression()
+  e1 = AndExpression()
+  (
+    "||" e2 = AndExpression()
+    {
+      e1 = new Or(e1, e2);
+    }
+  )*
   {
-    return new Or(e1, e2);
-  }
-}
-
-Exp DivisionExpression() :
-{
-  Exp e1, e2;
-}
-{
-  e1 = PrimaryExpression() "/" e2 = PrimaryExpression()
-  {
-    return new Divides(e1, e2);
+    return e1;
   }
 }
 
@@ -765,9 +758,15 @@ Exp AndExpression() :
   Exp e1, e2;
 }
 {
-  e1 = PrimaryExpression() "&&" e2 = PrimaryExpression()
+  e1 = CompareExpression()
+  (
+    "&&" e2 = CompareExpression()
+    {
+      e1 = new And(e1, e2);
+    }
+  )*
   {
-    return new And(e1, e2);
+    return e1;
   }
 }
 
@@ -776,9 +775,46 @@ Exp CompareExpression() :
   Exp e1, e2;
 }
 {
-  e1 = PrimaryExpression() "<" e2 = PrimaryExpression()
+  e1 = AdditiveExpression()
+  (
+    "<" e2 = AdditiveExpression()
+    {
+      e1 = new LessThan(e1, e2);
+    }
+  )*
   {
-    return new LessThan(e1, e2);
+    return e1;
+  }
+}
+
+Exp AdditiveExpression() :
+{
+  Exp e1, e2;
+  Token op;
+}
+{
+  e1 = MultiplicativeExpression()
+  (
+    LOOKAHEAD(("+"
+  | "-") MultiplicativeExpression())
+    (
+      op = "+"
+    | op = "-"
+    )
+    e2 = MultiplicativeExpression()
+    {
+      if (op.image == "+")
+      {
+        e1 = new Plus(e1, e2);
+      }
+      else
+      {
+        e1 = new Minus(e1, e2);
+      }
+    }
+  )*
+  {
+    return e1;
   }
 }
 
@@ -804,6 +840,49 @@ Exp MinusExpression() :
   }
 }
 
+Exp MultiplicativeExpression() :
+{
+  Exp e1, e2;
+  Token op;
+}
+{
+  e1 = ExponentialExpression()
+  (
+    LOOKAHEAD(("*"
+  | "/") ExponentialExpression())
+    (
+      op = "*"
+    | op = "/"
+    )
+    e2 = ExponentialExpression()
+    {
+      //      e1 = new Multiplicative(e1, e2, op.image);
+      if (op.image == "*")
+      {
+        e1 = new Times(e1, e2);
+      }
+      else
+      {
+        e1 = new Divides(e1, e2);
+      }
+    }
+  )*
+  {
+    return e1;
+  }
+}
+
+Exp DivisionExpression() :
+{
+  Exp e1, e2;
+}
+{
+  e1 = PrimaryExpression() "/" e2 = PrimaryExpression()
+  {
+    return new Divides(e1, e2);
+  }
+}
+
 Exp TimesExpression() :
 {
   Exp e1, e2;
@@ -812,6 +891,67 @@ Exp TimesExpression() :
   e1 = PrimaryExpression() "*" e2 = PrimaryExpression()
   {
     return new Times(e1, e2);
+  }
+}
+
+Exp ExponentialExpression() :
+{
+  Exp e1, e2;
+}
+{
+  e1 = UnaryExpression()
+  [
+    "**" e2 = ExponentialExpression()
+    {
+      return new Exponential(e1, e2);
+    }
+  ]
+  {
+    return e1;
+  }
+}
+
+Exp UnaryExpression() :
+{
+  Exp e;
+  Token op;
+}
+{
+  (
+    op = "!" e = UnaryExpression()
+    {
+      return new Not(e);
+    }
+  | 
+    op = "-" e = UnaryExpression()
+    {
+      return new UnaryMinus(e);
+    }
+  | 
+    e = AccessExpression()
+    {
+      return e;
+    }
+  )
+ 
+}
+
+Exp AccessExpression() :
+{
+  Exp e;
+}
+{
+  (
+    LOOKAHEAD(PrimaryExpression() "[")
+    e = ArrayLookup()
+  | LOOKAHEAD(PrimaryExpression() "." "length")
+    e = ArrayLength()
+  | LOOKAHEAD(PrimaryExpression() "." Identifier() "(")
+    e = MessageSend()
+  | e = PrimaryExpression()
+  )
+  {
+    return e;
   }
 }
 
@@ -907,10 +1047,6 @@ Exp PrimaryExpression() :
     e = ArrayAllocationExpression()
   | 
     e = AllocationExpression()
-  | 
-    e = UnaryMinusExpression()
-  | 
-    e = NotExpression()
   | 
     e = BracketExpression()
   )

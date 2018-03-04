@@ -21,91 +21,93 @@ public interface MiniJavaParserConstants {
   /** RegularExpression Id. */
   int RPAREN = 10;
   /** RegularExpression Id. */
-  int LSQPAREN = 11;
+  int LBRACE = 11;
   /** RegularExpression Id. */
-  int RSQPAREN = 12;
+  int RBRACE = 12;
   /** RegularExpression Id. */
-  int LBRACE = 13;
+  int LBRACKET = 13;
   /** RegularExpression Id. */
-  int RBRACE = 14;
+  int RBRACKET = 14;
   /** RegularExpression Id. */
   int SEMICOLON = 15;
   /** RegularExpression Id. */
-  int DOT = 16;
+  int COMMA = 16;
   /** RegularExpression Id. */
-  int ASSIGN = 17;
+  int DOT = 17;
   /** RegularExpression Id. */
-  int LT = 18;
+  int BANG = 18;
   /** RegularExpression Id. */
-  int PLUS = 19;
+  int EXPONENTIAL = 19;
   /** RegularExpression Id. */
-  int MINUS = 20;
+  int DIVISION = 20;
   /** RegularExpression Id. */
-  int AND = 21;
+  int STAR = 21;
   /** RegularExpression Id. */
-  int NOT = 22;
+  int LT = 22;
   /** RegularExpression Id. */
-  int BOOLEAN = 23;
+  int OR = 23;
   /** RegularExpression Id. */
-  int CLASS = 24;
+  int SC_AND = 24;
   /** RegularExpression Id. */
-  int INTERFACE = 25;
+  int PLUS = 25;
   /** RegularExpression Id. */
-  int ELSE = 26;
+  int MINUS = 26;
   /** RegularExpression Id. */
-  int EXTENDS = 27;
+  int ASSIGN = 27;
   /** RegularExpression Id. */
-  int FALSE = 28;
+  int BOOLEAN = 28;
   /** RegularExpression Id. */
-  int IF = 29;
+  int CLASS = 29;
   /** RegularExpression Id. */
-  int WHILE = 30;
+  int ELSE = 30;
   /** RegularExpression Id. */
-  int INTEGER = 31;
+  int EXTENDS = 31;
   /** RegularExpression Id. */
-  int LENGTH = 32;
+  int FALSE = 32;
   /** RegularExpression Id. */
-  int MAIN = 33;
+  int IF = 33;
   /** RegularExpression Id. */
-  int NEW = 34;
+  int INT = 34;
   /** RegularExpression Id. */
-  int PUBLIC = 35;
+  int NEW = 35;
   /** RegularExpression Id. */
-  int RETURN = 36;
+  int PUBLIC = 36;
   /** RegularExpression Id. */
-  int STATIC = 37;
+  int RETURN = 37;
   /** RegularExpression Id. */
-  int STRING = 38;
+  int STATIC = 38;
   /** RegularExpression Id. */
   int THIS = 39;
   /** RegularExpression Id. */
   int TRUE = 40;
   /** RegularExpression Id. */
-  int PRINT = 41;
+  int VOID = 41;
   /** RegularExpression Id. */
-  int VOID = 42;
+  int WHILE = 42;
   /** RegularExpression Id. */
-  int OR = 43;
+  int PRINT = 43;
   /** RegularExpression Id. */
-  int DIVISION = 44;
+  int MAIN = 44;
   /** RegularExpression Id. */
-  int EXPONENTIAL = 45;
+  int STRING = 45;
   /** RegularExpression Id. */
-  int FOR = 46;
+  int LENGTH = 46;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 47;
+  int FOR = 47;
   /** RegularExpression Id. */
-  int DECIMAL_LITERAL = 48;
+  int INTEGER_LITERAL = 48;
   /** RegularExpression Id. */
-  int HEX_LITERAL = 49;
+  int DECIMAL_LITERAL = 49;
   /** RegularExpression Id. */
-  int OCTAL_LITERAL = 50;
+  int HEX_LITERAL = 50;
   /** RegularExpression Id. */
-  int IDENTIFIER = 51;
+  int OCTAL_LITERAL = 51;
   /** RegularExpression Id. */
-  int LETTER = 52;
+  int IDENTIFIER = 52;
   /** RegularExpression Id. */
-  int DIGIT = 53;
+  int LETTER = 53;
+  /** RegularExpression Id. */
+  int DIGIT = 54;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -123,41 +125,42 @@ public interface MiniJavaParserConstants {
     "<MULTI_LINE_COMMENT>",
     "\"(\"",
     "\")\"",
-    "\"[\"",
-    "\"]\"",
     "\"{\"",
     "\"}\"",
+    "\"[\"",
+    "\"]\"",
     "\";\"",
+    "\",\"",
     "\".\"",
-    "\"=\"",
+    "\"!\"",
+    "\"**\"",
+    "\"/\"",
+    "\"*\"",
     "\"<\"",
+    "\"||\"",
+    "\"&&\"",
     "\"+\"",
     "\"-\"",
-    "\"&\"",
-    "\"!\"",
+    "\"=\"",
     "\"boolean\"",
     "\"class\"",
-    "\"interface\"",
     "\"else\"",
     "\"extends\"",
     "\"false\"",
     "\"if\"",
-    "\"while\"",
     "\"int\"",
-    "\"length\"",
-    "\"main\"",
     "\"new\"",
     "\"public\"",
     "\"return\"",
     "\"static\"",
-    "\"String\"",
     "\"this\"",
     "\"true\"",
-    "\"System.out.println\"",
     "\"void\"",
-    "\"||\"",
-    "\"/\"",
-    "\"**\"",
+    "\"while\"",
+    "\"System.out.println\"",
+    "\"main\"",
+    "\"String\"",
+    "\"length\"",
     "\"for\"",
     "<INTEGER_LITERAL>",
     "<DECIMAL_LITERAL>",
@@ -166,9 +169,6 @@ public interface MiniJavaParserConstants {
     "<IDENTIFIER>",
     "<LETTER>",
     "<DIGIT>",
-    "\",\"",
-    "\"&&\"",
-    "\"*\"",
   };
 
 }

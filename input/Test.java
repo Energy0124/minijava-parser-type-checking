@@ -30,8 +30,9 @@ class LS{
     // for elements on the array
     public int Start(int sz){
         int aux01 ;
-        aux01 =  1 * 1 ;
-        if (this.Search(8)) System.out.println(1) ;
+        aux01 =  1 * 1 *1 +1 +1 /1 **1 **1 **1 +1 +1;
+       
+        if ( (4+1).length) System.out.println(1) ;
         else System.out.println(0) ;
         return 999 ;
     }
