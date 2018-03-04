@@ -72,4 +72,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+output/out.txt
+
 /myparser/
+/.idea/
