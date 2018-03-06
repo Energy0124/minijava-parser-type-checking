@@ -1,8 +1,8 @@
 options
 {
   JAVA_UNICODE_ESCAPE = true;
-//  DEBUG_PARSER = true;
-//  DEBUG_LOOKAHEAD =true;
+  //  DEBUG_PARSER = true;
+  //  DEBUG_LOOKAHEAD =true;
 }
 
 PARSER_BEGIN(MiniJavaParser)
@@ -11,6 +11,7 @@ import syntaxtree.*;
 
 public class MiniJavaParser
 {
+  public static boolean hasError = false;
 }
 
 PARSER_END(MiniJavaParser)
@@ -336,12 +337,26 @@ MethodDecl MethodDeclaration() :
   Exp e;
 }
 {
-  "public" t = Type() i = Identifier() 
-  "("
-  (
+  "public" t = Type() i = Identifier()
+  try
+  {
+    "(" 
+    (
     fl = FormalParameterList()
-  )?
-  ")" 
+    ) ? 
+    ")"
+  }
+  catch (ParseException exception)
+  {
+    System.out.println("Line " + token.beginLine + " Column " + token.beginColumn + ": invalid formal parameter list");
+    hasError = true;
+    Token tk;
+    do
+    {
+      tk = getNextToken();
+    }
+    while (tk.kind != RPAREN);
+  }
   "{"
   (
     LOOKAHEAD(2)
@@ -385,12 +400,33 @@ FormalList FormalParameterList() :
 
 Formal FormalParameter() :
 {
-  Type t;
-  Identifier i;
+  Type t = null;
+  Identifier i = null;
 }
 {
-  t = Type() i = Identifier()
+  LOOKAHEAD(Type() Identifier())
+  (
+    t = Type() i = Identifier()
+  )
   {
+    return new Formal(t, i);
+  }
+| LOOKAHEAD(Type())
+  (
+    t = Type()
+  )
+  {
+    System.out.println("Line " + token.beginLine + " Column " + token.beginColumn + ": identifier expected");
+    hasError = true;
+    return new Formal(t, i);
+  }
+| LOOKAHEAD(Identifier())
+  (
+    i = Identifier()
+  )
+  {
+    System.out.println("Line " + token.beginLine + " Column " + token.beginColumn + ": identifier expected");
+    hasError = true;
     return new Formal(t, i);
   }
 }
@@ -402,6 +438,12 @@ Formal FormalParameterRest() :
 {
   "," f = FormalParameter()
   {
+    return f;
+  }
+| f = FormalParameter()
+  {
+    System.out.println("Line " + token.beginLine + " Column " + token.beginColumn + ": , expected");
+    hasError = true;
     return f;
   }
 }
@@ -935,7 +977,6 @@ Exp UnaryExpression() :
       return e;
     }
   )
- 
 }
 
 Exp AccessExpression() :

@@ -28,7 +28,10 @@ public class Main {
 		}
 		try {
 			Program root = parser.Goal();
-			root.accept(new PrettyPrintVisitor());
+			if (parser.hasError) {
+				return;
+			}
+			root.accept(new TranslateToJavaVisitor());
 
 		} catch (ParseException e) {
 			System.out.println(e.toString());
