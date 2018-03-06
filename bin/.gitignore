@@ -74,6 +74,6 @@ fabric.properties
 
 output/out.txt
 
-/myparser/
-/.idea/
 /visitor/
+/myparser/
+/.settings/

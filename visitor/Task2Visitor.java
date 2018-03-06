@@ -2,7 +2,7 @@ package visitor;
 
 import syntaxtree.*;
 
-public class PrettyPrintVisitor implements Visitor {
+public class Task2Visitor implements Visitor {
 
     // MainClass m;
     // ClassDeclList cl;

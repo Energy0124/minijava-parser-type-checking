@@ -5,16 +5,16 @@ options
   //  DEBUG_LOOKAHEAD =true;
 }
 
-PARSER_BEGIN(MiniJavaParser)
+PARSER_BEGIN(MiniJavaVariantParser)
 package myparser;
 import syntaxtree.*;
 
-public class MiniJavaParser
+public class MiniJavaVariantParser
 {
   public static boolean hasError = false;
 }
 
-PARSER_END(MiniJavaParser)
+PARSER_END(MiniJavaVariantParser)
 
 SKIP : /* WHITE SPACE */
 {

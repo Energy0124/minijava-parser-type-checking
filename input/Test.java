@@ -13,7 +13,7 @@ class KS extends LS {
 
 	// Invoke methods to initialize, print and search
 	// for elements on the array
-	public int Start(int sz int [], x boolean y int z) {
+	public int Start(int sz, int [] x, boolean y, int z) {
 		for (int a = 1 + 1, j = 5 - 2; a < 1; k = 5, p[1] = 7) {
 			for (int a = 1 + 1, j = 5 - 2; a < 1; k = 5, p[1] = 7)
 				a = 1;

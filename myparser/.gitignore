@@ -5,3 +5,6 @@
 /ParseException.java
 /Token.java
 /TokenMgrError.java
+/MiniJavaVariantParser.java
+/MiniJavaVariantParserConstants.java
+/MiniJavaVariantParserTokenManager.java

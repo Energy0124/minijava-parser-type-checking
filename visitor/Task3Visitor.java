@@ -2,7 +2,7 @@ package visitor;
 
 import syntaxtree.*;
 
-public class TranslateToJavaVisitor implements Visitor {
+public class Task3Visitor implements Visitor {
 
 	// MainClass m;
 	// ClassDeclList cl;
