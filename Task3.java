@@ -9,10 +9,10 @@ public class Task3 {
 	public static void main(String[] args) {
 		MiniJavaVariantParser parser;
 		if (args.length == 0) {
-			System.out.println("MiniJavaVariantParser:  Reading from standard input . . .");
+//			System.out.println("MiniJavaVariantParser:  Reading from standard input . . .");
 			parser = new MiniJavaVariantParser(System.in);
 		} else if (args.length == 1) {
-			System.out.println("MiniJavaVariantParser:  Reading from file " + args[0] + " . . .");
+//			System.out.println("MiniJavaVariantParser:  Reading from file " + args[0] + " . . .");
 			try {
 				parser = new MiniJavaVariantParser(new java.io.FileInputStream(args[0]));
 			} catch (java.io.FileNotFoundException e) {
