@@ -326,4 +326,10 @@ public class TypeDepthFirstVisitor implements TypeVisitor {
 		n.s.accept(this);
 		return null;
 	}
+
+	@Override
+	public Type visit(DoubleType n) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

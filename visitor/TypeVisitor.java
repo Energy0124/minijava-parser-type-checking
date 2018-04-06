@@ -86,4 +86,6 @@ public interface TypeVisitor {
 	public Type visit(AssignExpr n);
 
 	public Type visit(For n);
+
+	public Type visit(DoubleType n);
 }

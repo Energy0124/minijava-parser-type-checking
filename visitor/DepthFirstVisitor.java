@@ -253,7 +253,7 @@ public class DepthFirstVisitor implements Visitor {
 	public void visit(LocalVariableDecl n) {
 		n.t.accept(this);
 		n.i.accept(this);
-		
+
 	}
 
 	@Override
@@ -261,7 +261,7 @@ public class DepthFirstVisitor implements Visitor {
 		n.i.accept(this);
 		n.e1.accept(this);
 		n.e2.accept(this);
-		
+
 	}
 
 	@Override
@@ -284,6 +284,12 @@ public class DepthFirstVisitor implements Visitor {
 		}
 		n.s.accept(this);
 
+
+	}
+
+	@Override
+	public void visit(DoubleType n) {
+		// TODO Auto-generated method stub
 
 	}
 }

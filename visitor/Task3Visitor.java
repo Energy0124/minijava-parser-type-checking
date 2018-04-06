@@ -429,4 +429,10 @@ public class Task3Visitor implements Visitor {
 
 		System.out.println("}");
 	}
+
+	@Override
+	public void visit(DoubleType n) {
+		 System.out.print("double");
+
+	}
 }
