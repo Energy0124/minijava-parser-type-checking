@@ -1,13 +1,19 @@
 package syntaxtree;
 
-public abstract class ForInit {
-	public abstract void addElement(StmtExpr n);
+import myparser.Token;
 
-	public abstract StmtExpr elementAt(int i);
+public abstract class ForInit extends ASTNode{
+    public ForInit(Token token) {
+        super(token);
+    }
 
-	public abstract int size();
+    public abstract void addElement(StmtExpr n);
 
-	public abstract boolean hasType();
+    public abstract StmtExpr elementAt(int i);
 
-	public abstract Type type();
+    public abstract int size();
+
+    public abstract boolean hasType();
+
+    public abstract Type type();
 }

@@ -1,5 +1,6 @@
 package syntaxtree;
 
+import myparser.Token;
 import visitor.TypeVisitor;
 import visitor.Visitor;
 
@@ -9,7 +10,8 @@ public class For extends Statement {
     public StmtExprList l;
     public Statement s;
 
-    public For(ForInit f, Exp e, StmtExprList l, Statement s) {
+    public For(ForInit f, Exp e, StmtExprList l, Statement s, Token token) {
+        super(token);
         this.f = f;
         this.e = e;
         this.l = l;

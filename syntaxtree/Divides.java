@@ -1,11 +1,14 @@
 package syntaxtree;
 
+import myparser.Token;
 import visitor.TypeVisitor;
 import visitor.Visitor;
 
 public class Divides extends Exp {
     public Exp e1, e2;
-    public Divides(Exp e1, Exp e2) {
+
+    public Divides(Exp e1, Exp e2, Token token) {
+        super(token);
         this.e1 = e1;
         this.e2 = e2;
     }

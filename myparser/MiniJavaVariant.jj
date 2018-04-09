@@ -94,6 +94,7 @@ TOKEN :
 | < FALSE : "false" >
 | < IF : "if" >
 | < INT : "int" >
+| < DOUBLE : "double" >
 | < NEW : "new" >
 | < PUBLIC : "public" >
 | < RETURN : "return" >
@@ -116,7 +117,7 @@ TOKEN :
   < INTEGER_LITERAL :
     < DECIMAL_LITERAL >
   | < HEX_LITERAL >
-  | < OCTAL_LITERAL > 
+  | < OCTAL_LITERAL >
   >
 | < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >
 | < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >
@@ -135,71 +136,23 @@ TOKEN :
       < LETTER >
     | < DIGIT >
     )* >
-| < #LETTER : 
-    [ 
-    "$", 
-    "A"-"Z", 
-    "_", 
-    "a"-"z" 
-    ] 
+| < #LETTER :
+    [
+    "$",
+    "A"-"Z",
+    "_",
+    "a"-"z"
+    ]
   >
-| 
-  < #DIGIT : 
-    [ 
-    "0"-"9" 
-    ] 
+|
+  < #DIGIT :
+    [
+    "0"-"9"
+    ]
   >
 }
 
-//
-//TOKEN : /* LITERALS */
-//{
-//  < INTEGER_LITERAL: ( ["1"-"9"] (["0"-"9"])* | "0" ) >
-//}
-//
-//TOKEN : /* IDENTIFIERS */
-//{
-//  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
-//|
-//  < #LETTER:
-//      [
-//       "$",
-//       "A"-"Z",
-//       "_",
-//       "a"-"z",
-//       "À"-"Ö",
-//       "Ø"-"ö",
-//       "ø"-"ÿ",
-//       "Ā"-"῿",
-//       "぀"-"㆏",
-//       "㌀"-"㍿",
-//       "㐀"-"㴭",
-//       "一"-"鿿",
-//       "豈"-"﫿"
-//      ]
-//  >
-//|
-//  < #DIGIT:
-//      [
-//       "0"-"9",
-//       "٠"-"٩",
-//       "۰"-"۹",
-//       "०"-"९",
-//       "০"-"৯",
-//       "੦"-"੯",
-//       "૦"-"૯",
-//       "୦"-"୯",
-//       "௧"-"௯",
-//       "౦"-"౯",
-//       "೦"-"೯",
-//       "൦"-"൯",
-//       "๐"-"๙",
-//       "໐"-"໙",
-//       "၀"-"၉"
-//      ]
-//  >
-//}
-//
+
 /************************************
  * The MiniJava Grammar Starts Here *
  ************************************/
@@ -208,7 +161,7 @@ TOKEN :
 Program Goal() :
 {
   MainClass m;
-  ClassDeclList cl = new ClassDeclList();
+  ClassDeclList cl = new ClassDeclList(token);
   ClassDecl c;
 }
 {
@@ -221,7 +174,7 @@ Program Goal() :
   )*
   < EOF >
   {
-    return new Program(m, cl);
+    return new Program(m, cl, token);
   }
 }
 
@@ -231,12 +184,12 @@ MainClass MainClass() :
   Statement s;
 }
 {
-  "class" i1 = Identifier() "{" 
-  "public" "static" "void" "main" "(" "String" "[" "]" i2 = Identifier() ")" 
-  "{" s = Statement() "}" 
+  "class" i1 = Identifier() "{"
+  "public" "static" "void" "main" "(" "String" "[" "]" i2 = Identifier() ")"
+  "{" s = Statement() "}"
   "}"
   {
-    return new MainClass(i1, i2, s);
+    return new MainClass(i1, i2, s, token);
   }
 }
 
@@ -248,7 +201,7 @@ ClassDecl ClassDeclaration() :
   (
     LOOKAHEAD(3)
     c = ClassDeclarationSimple()
-  | 
+  |
     c = ClassDeclarationExtends()
   )
   {
@@ -260,9 +213,9 @@ ClassDecl ClassDeclarationSimple() :
 {
   Identifier i;
   VarDecl v;
-  VarDeclList vl = new VarDeclList();
+  VarDeclList vl = new VarDeclList(token);
   MethodDecl m;
-  MethodDeclList ml = new MethodDeclList();
+  MethodDeclList ml = new MethodDeclList(token);
 }
 {
   "class" i = Identifier() "{"
@@ -280,7 +233,7 @@ ClassDecl ClassDeclarationSimple() :
   )*
   "}"
   {
-    return new ClassDeclSimple(i, vl, ml);
+    return new ClassDeclSimple(i, vl, ml, token);
   }
 }
 
@@ -288,12 +241,12 @@ ClassDecl ClassDeclarationExtends() :
 {
   Identifier i1, i2;
   VarDecl v;
-  VarDeclList vl = new VarDeclList();
+  VarDeclList vl = new VarDeclList(token);
   MethodDecl m;
-  MethodDeclList ml = new MethodDeclList();
+  MethodDeclList ml = new MethodDeclList(token);
 }
 {
-  "class" i1 = Identifier() "extends" i2 = Identifier() 
+  "class" i1 = Identifier() "extends" i2 = Identifier()
   "{"
   (
     v = VarDeclaration()
@@ -309,7 +262,7 @@ ClassDecl ClassDeclarationExtends() :
   )*
   "}"
   {
-    return new ClassDeclExtends(i1, i2, vl, ml);
+    return new ClassDeclExtends(i1, i2, vl, ml, token);
   }
 }
 
@@ -321,7 +274,7 @@ VarDecl VarDeclaration() :
 {
   t = Type() i = Identifier() ";"
   {
-    return new VarDecl(t, i);
+    return new VarDecl(t, i, token);
   }
 }
 
@@ -329,21 +282,21 @@ MethodDecl MethodDeclaration() :
 {
   Type t;
   Identifier i;
-  FormalList fl = new FormalList();
+  FormalList fl = new FormalList(token);
   VarDecl v;
-  VarDeclList vl = new VarDeclList();
+  VarDeclList vl = new VarDeclList(token);
   Statement s;
-  StatementList sl = new StatementList();
+  StatementList sl = new StatementList(token);
   Exp e;
 }
 {
   "public" t = Type() i = Identifier()
   try
   {
-    "(" 
+    "("
     (
     fl = FormalParameterList()
-    ) ? 
+    ) ?
     ")"
   }
   catch (ParseException exception)
@@ -373,13 +326,13 @@ MethodDecl MethodDeclaration() :
   )*
   "return" e = Expression() ";" "}"
   {
-    return new MethodDecl(t, i, fl, vl, sl, e);
+    return new MethodDecl(t, i, fl, vl, sl, e, token);
   }
 }
 
 FormalList FormalParameterList() :
 {
-  FormalList fl = new FormalList();
+  FormalList fl = new FormalList(token);
   Formal f;
 }
 {
@@ -409,7 +362,7 @@ Formal FormalParameter() :
     t = Type() i = Identifier()
   )
   {
-    return new Formal(t, i);
+    return new Formal(t, i, token);
   }
 | LOOKAHEAD(Type())
   (
@@ -418,7 +371,7 @@ Formal FormalParameter() :
   {
     System.out.println("Line " + token.beginLine + " Column " + token.beginColumn + ": identifier expected");
     hasError = true;
-    return new Formal(t, i);
+    return new Formal(t, i, token);
   }
 | LOOKAHEAD(Identifier())
   (
@@ -427,7 +380,7 @@ Formal FormalParameter() :
   {
     System.out.println("Line " + token.beginLine + " Column " + token.beginColumn + ": identifier expected");
     hasError = true;
-    return new Formal(t, i);
+    return new Formal(t, i, token);
   }
 }
 
@@ -456,12 +409,14 @@ Type Type() :
   (
     LOOKAHEAD(3)
     t = ArrayType()
-  | 
+  |
     t = BooleanType()
-  | 
+  |
     t = IntegerType()
-  | 
+  |
     t = IdentifierType()
+  |
+    t = DoubleType()
   )
   {
     return t;
@@ -473,7 +428,7 @@ Type ArrayType() :
 {
   "int" "[" "]"
   {
-    return new IntArrayType();
+    return new IntArrayType(token);
   }
 }
 
@@ -482,7 +437,7 @@ Type BooleanType() :
 {
   "boolean"
   {
-    return new BooleanType();
+    return new BooleanType(token);
   }
 }
 
@@ -491,7 +446,7 @@ Type IntegerType() :
 {
   "int"
   {
-    return new IntegerType();
+    return new IntegerType(token);
   }
 }
 
@@ -502,7 +457,16 @@ Type IdentifierType() :
 {
   t = < IDENTIFIER >
   {
-    return new IdentifierType(t.image);
+    return new IdentifierType(t.image,token);
+  }
+}
+
+Type DoubleType() :
+{}
+{
+  "double"
+  {
+    return new DoubleType(token);
   }
 }
 
@@ -513,19 +477,19 @@ Statement Statement() :
 {
   (
     s = Block()
-  | 
+  |
     LOOKAHEAD(2)
     s = AssignmentStatement()
-  | 
+  |
     LOOKAHEAD(2)
     s = ArrayAssignmentStatement()
-  | 
+  |
     s = IfStatement()
-  | 
+  |
     s = WhileStatement()
-  | 
+  |
     s = PrintStatement()
-  | 
+  |
     s = ForStatement()
   )
   {
@@ -536,7 +500,7 @@ Statement Statement() :
 Statement Block() :
 {
   Statement s;
-  StatementList sl = new StatementList();
+  StatementList sl = new StatementList(token);
 }
 {
   "{"
@@ -548,7 +512,7 @@ Statement Block() :
   )*
   "}"
   {
-    return new Block(sl);
+    return new Block(sl, token);
   }
 }
 
@@ -560,7 +524,7 @@ Statement AssignmentStatement() :
 {
   i = Identifier() "=" e = Expression() ";"
   {
-    return new Assign(i, e);
+    return new Assign(i, e, token);
   }
 }
 
@@ -572,7 +536,7 @@ Statement ArrayAssignmentStatement() :
 {
   i = Identifier() "[" e1 = Expression() "]" "=" e2 = Expression() ";"
   {
-    return new ArrayAssign(i, e1, e2);
+    return new ArrayAssign(i, e1, e2, token);
   }
 }
 
@@ -584,7 +548,7 @@ Statement IfStatement() :
 {
   "if" "(" e = Expression() ")" s1 = Statement() "else" s2 = Statement()
   {
-    return new If(e, s1, s2);
+    return new If(e, s1, s2, token);
   }
 }
 
@@ -596,7 +560,7 @@ Statement WhileStatement() :
 {
   "while" "(" e = Expression() ")" s = Statement()
   {
-    return new While(e, s);
+    return new While(e, s, token);
   }
 }
 
@@ -607,7 +571,7 @@ Statement PrintStatement() :
 {
   "System.out.println" "(" e = Expression() ")" ";"
   {
-    return new Print(e);
+    return new Print(e, token);
   }
 }
 
@@ -621,7 +585,7 @@ Statement ForStatement() :
 {
   "for" "(" f = ForInit() ";" e = Expression() ";" l = StmtExprList() ")" s = Statement()
   {
-    return new For(f, e, l, s);
+    return new For(f, e, l, s, token);
   }
 }
 
@@ -633,7 +597,7 @@ ForInit ForInit() :
   (
     LOOKAHEAD(Type() Identifier())
     f = LocalVariableDeclaration()
-  | 
+  |
     LOOKAHEAD(Identifier() "=")
     f = StmtExprList()
   )
@@ -644,7 +608,7 @@ ForInit ForInit() :
 
 StmtExprList StmtExprList() :
 {
-  StmtExprList l = new StmtExprList();
+  StmtExprList l = new StmtExprList(token);
   StmtExpr e;
 }
 {
@@ -674,13 +638,13 @@ StmtExpr StmtExpr() :
   LOOKAHEAD(Identifier() "=")
   i = Identifier() "=" e = Expression()
   {
-    return new AssignExpr(i, e);
+    return new AssignExpr(i, e, token);
   }
-| 
+|
   LOOKAHEAD(Identifier() "[")
   i = Identifier() "[" e1 = Expression() "]" "=" e2 = Expression()
   {
-    return new ArrayAssignExpr(i, e1, e2);
+    return new ArrayAssignExpr(i, e1, e2, token);
   }
 }
 
@@ -693,7 +657,7 @@ LocalVariableDeclList LocalVariableDeclaration() :
 {
   d1 = LocalVariableDeclarationFirst()
   {
-    l = new LocalVariableDeclList(d1.t);
+    l = new LocalVariableDeclList(d1.t, token);
     l.addElement(d1);
   }
   (
@@ -716,7 +680,7 @@ LocalVariableDecl LocalVariableDeclarationFirst() :
 {
   t = Type() i = Identifier() "=" e = Expression()
   {
-    return new LocalVariableDecl(t, i, e);
+    return new LocalVariableDecl(t, i, e, token);
   }
 }
 
@@ -728,7 +692,7 @@ LocalVariableDecl LocalVariableDeclarationRest(Type t) :
 {
   "," i = Identifier() "=" e = Expression()
   {
-    return new LocalVariableDecl(t, i, e);
+    return new LocalVariableDecl(t, i, e, token);
   }
 }
 
@@ -741,37 +705,37 @@ Exp Expression() :
     e = OrExpression()
     //    LOOKAHEAD(PrimaryExpression() "&&")
     //    e = AndExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "||")
     //    e = OrExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "<")
     //    e = CompareExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "+")
     //    e = PlusExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "-")
     //    e = MinusExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "/")
     //    e = DivisionExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "*")
     //    e = TimesExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "**")
     //    e = ExponentialExpression()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "[")
     //    e = ArrayLookup()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "." "length")
     //    e = ArrayLength()
-    //  | 
+    //  |
     //    LOOKAHEAD(PrimaryExpression() "." Identifier() "(")
     //    e = MessageSend()
-    //  | 
+    //  |
     //    e = PrimaryExpression()
   )
   {
@@ -789,7 +753,7 @@ Exp OrExpression() :
   (
     "||" e2 = AndExpression()
     {
-      e1 = new Or(e1, e2);
+      e1 = new Or(e1, e2, token);
     }
   )*
   {
@@ -806,7 +770,7 @@ Exp AndExpression() :
   (
     "&&" e2 = CompareExpression()
     {
-      e1 = new And(e1, e2);
+      e1 = new And(e1, e2, token);
     }
   )*
   {
@@ -823,7 +787,7 @@ Exp CompareExpression() :
   (
     "<" e2 = AdditiveExpression()
     {
-      e1 = new LessThan(e1, e2);
+      e1 = new LessThan(e1, e2, token);
     }
   )*
   {
@@ -849,11 +813,11 @@ Exp AdditiveExpression() :
     {
       if (op.image == "+")
       {
-        e1 = new Plus(e1, e2);
+        e1 = new Plus(e1, e2, token);
       }
       else
       {
-        e1 = new Minus(e1, e2);
+        e1 = new Minus(e1, e2, token);
       }
     }
   )*
@@ -869,7 +833,7 @@ Exp PlusExpression() :
 {
   e1 = PrimaryExpression() "+" e2 = PrimaryExpression()
   {
-    return new Plus(e1, e2);
+    return new Plus(e1, e2, token);
   }
 }
 
@@ -880,7 +844,7 @@ Exp MinusExpression() :
 {
   e1 = PrimaryExpression() "-" e2 = PrimaryExpression()
   {
-    return new Minus(e1, e2);
+    return new Minus(e1, e2, token);
   }
 }
 
@@ -903,11 +867,11 @@ Exp MultiplicativeExpression() :
       //      e1 = new Multiplicative(e1, e2, op.image);
       if (op.image == "*")
       {
-        e1 = new Times(e1, e2);
+        e1 = new Times(e1, e2, token);
       }
       else
       {
-        e1 = new Divides(e1, e2);
+        e1 = new Divides(e1, e2, token);
       }
     }
   )*
@@ -923,7 +887,7 @@ Exp DivisionExpression() :
 {
   e1 = PrimaryExpression() "/" e2 = PrimaryExpression()
   {
-    return new Divides(e1, e2);
+    return new Divides(e1, e2, token);
   }
 }
 
@@ -934,7 +898,7 @@ Exp TimesExpression() :
 {
   e1 = PrimaryExpression() "*" e2 = PrimaryExpression()
   {
-    return new Times(e1, e2);
+    return new Times(e1, e2, token);
   }
 }
 
@@ -947,7 +911,7 @@ Exp ExponentialExpression() :
   [
     "**" e2 = ExponentialExpression()
     {
-      return new Exponential(e1, e2);
+      return new Exponential(e1, e2, token);
     }
   ]
   {
@@ -964,14 +928,14 @@ Exp UnaryExpression() :
   (
     op = "!" e = UnaryExpression()
     {
-      return new Not(e);
+      return new Not(e, token);
     }
-  | 
+  |
     op = "-" e = UnaryExpression()
     {
-      return new UnaryMinus(e);
+      return new UnaryMinus(e, token);
     }
-  | 
+  |
     e = AccessExpression()
     {
       return e;
@@ -1005,7 +969,7 @@ Exp ArrayLookup() :
 {
   e1 = PrimaryExpression() "[" e2 = PrimaryExpression() "]"
   {
-    return new ArrayLookup(e1, e2);
+    return new ArrayLookup(e1, e2, token);
   }
 }
 
@@ -1016,7 +980,7 @@ Exp ArrayLength() :
 {
   e = PrimaryExpression() "." "length"
   {
-    return new ArrayLength(e);
+    return new ArrayLength(e, token);
   }
 }
 
@@ -1024,24 +988,24 @@ Exp MessageSend() :
 {
   Exp e;
   Identifier i;
-  ExpList el = new ExpList();
+  ExpList el = new ExpList(token);
 }
 {
-  e = PrimaryExpression() "." i = Identifier() 
+  e = PrimaryExpression() "." i = Identifier()
   "("
   (
     el = ExpressionList()
   )?
   ")"
   {
-    return new Call(e, i, el);
+    return new Call(e, i, el, token);
   }
 }
 
 ExpList ExpressionList() :
 {
   Exp e1, e2;
-  ExpList el = new ExpList();
+  ExpList el = new ExpList(token);
 }
 {
   e1 = Expression()
@@ -1077,20 +1041,20 @@ Exp PrimaryExpression() :
 {
   (
     e = IntegerLiteral()
-  | 
+  |
     e = TrueLiteral()
-  | 
+  |
     e = FalseLiteral()
-  | 
+  |
     e = IdentifierExp()
-  | 
+  |
     e = ThisExpression()
-  | 
+  |
     LOOKAHEAD(3)
     e = ArrayAllocationExpression()
-  | 
+  |
     e = AllocationExpression()
-  | 
+  |
     e = BracketExpression()
   )
   {
@@ -1105,7 +1069,7 @@ Exp UnaryMinusExpression() :
 {
   "-" e = Expression()
   {
-    return new UnaryMinus(e);
+    return new UnaryMinus(e, token);
   }
 }
 
@@ -1116,7 +1080,7 @@ Exp IntegerLiteral() :
 {
   t = < INTEGER_LITERAL >
   {
-    return new IntegerLiteral(Integer.parseInt(t.image));
+    return new IntegerLiteral(Integer.parseInt(t.image), token);
   }
 }
 
@@ -1125,7 +1089,7 @@ Exp TrueLiteral() :
 {
   "true"
   {
-    return new True();
+    return new True(token);
   }
 }
 
@@ -1134,7 +1098,7 @@ Exp FalseLiteral() :
 {
   "false"
   {
-    return new False();
+    return new False(token);
   }
 }
 
@@ -1145,7 +1109,7 @@ Exp IdentifierExp() :
 {
   t = < IDENTIFIER >
   {
-    return new IdentifierExp(t.image);
+    return new IdentifierExp(t.image, token);
   }
 }
 
@@ -1154,7 +1118,7 @@ Exp ThisExpression() :
 {
   "this"
   {
-    return new This();
+    return new This(token);
   }
 }
 
@@ -1165,7 +1129,7 @@ Exp ArrayAllocationExpression() :
 {
   "new" "int" "[" e = Expression() "]"
   {
-    return new NewArray(e);
+    return new NewArray(e, token);
   }
 }
 
@@ -1176,7 +1140,7 @@ Exp AllocationExpression() :
 {
   "new" i = Identifier() "(" ")"
   {
-    return new NewObject(i);
+    return new NewObject(i, token);
   }
 }
 
@@ -1187,7 +1151,7 @@ Exp NotExpression() :
 {
   "!" e = Expression()
   {
-    return new Not(e);
+    return new Not(e, token);
   }
 }
 
@@ -1209,6 +1173,6 @@ Identifier Identifier() :
 {
   t = < IDENTIFIER >
   {
-    return new Identifier(t.image);
+    return new Identifier(t.image, token);
   }
 }

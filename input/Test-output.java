@@ -1,14 +1,17 @@
-MiniJavaParser:  Reading from file input/Test.java . . .
+MiniJavaParser:Reading from file input/Test.java...
+
 class Test {
-    public static void main (String [] a) {
-        System.out.println(new BS().Start(20));  }
+    public static void main(String[] a) {
+        System.out.println(new BS().Start(20));
+    }
 }
 
 class KS extends
         LS {
-    int [] number;
+    int[] number;
     int size;
-    public int Start (int sz) {
+
+    public int Start(int sz) {
         {
             int a = (1 + 1), j = (5 - 2);
             while ((a < 1)) {
@@ -16,7 +19,8 @@ class KS extends
                     {
                         int a = (1 + 1), j = (5 - 2);
                         while ((a < 1)) {
-                            a = 1;k = 5;
+                            a = 1;
+                            k = 5;
                             p[1] = 7;
                         }
                     }
@@ -47,7 +51,8 @@ class KS extends
                                 if (this.Search(8))
                                     System.out.println(1);
                                 else System.out.println(0);
-                            } k = 5;
+                            }
+                            k = 5;
                             p[1] = 7;
                         }
                     }
@@ -55,7 +60,8 @@ class KS extends
                     {
                         a = k, j = (5 - 2);
                         while ((a < 1)) {
-                            a = 1;k = 5;
+                            a = 1;
+                            k = 5;
                             p[1] = 7;
                         }
                     }
@@ -64,7 +70,8 @@ class KS extends
                     if (this.Search(8))
                         System.out.println(1);
                     else System.out.println(0);
-                } k = 5;
+                }
+                k = 5;
                 p[1] = 7;
             }
         }
@@ -74,29 +81,25 @@ class KS extends
 }
 
 class LS {
-    int [] number;
+    int[] number;
     int size;
-    public int Start (int sz) {
+
+    public int Start(int sz) {
         int aux01;
         aux01 = ((((((1 * 1) * 1) + 1) + (1 / Math.pow(1, Math.pow(1, Math.pow(1, 1))))) + 1) + 1);
-        if ((4 + 1).length)
-        {
+        if ((4 + 1).length) {
             while (cont) {
                 key_aux = current_node.GetKey();
                 if ((v_key < key_aux))
-                    if (current_node.GetHas_Left())
-                    {
+                    if (current_node.GetHas_Left()) {
                         parent_node = current_node;
                         current_node = current_node.GetLeft();
-                    }
-                    else cont = false;
+                    } else cont = false;
                 else if ((key_aux < v_key))
-                    if (current_node.GetHas_Right())
-                    {
+                    if (current_node.GetHas_Right()) {
                         parent_node = current_node;
                         current_node = current_node.GetRight();
-                    }
-                    else cont = false;
+                    } else cont = false;
                 else {
                     if (is_root)
                         if ((!current_node.GetHas_Right() && !current_node.GetHas_Left()))
@@ -108,17 +111,17 @@ class LS {
                 }
                 is_root = false;
             }
-        }
-        else System.out.println(0);
+        } else System.out.println(0);
         return 999;
     }
 }
 
 class BS extends
         Test {
-    int [] number;
+    int[] number;
     int size;
-    public int Start (int sz) {
+
+    public int Start(int sz) {
         int aux01;
         aux01 = (1 * 1);
         if (this.Search(8))

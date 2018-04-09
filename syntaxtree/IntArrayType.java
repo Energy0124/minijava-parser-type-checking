@@ -1,13 +1,20 @@
 package syntaxtree;
-import visitor.Visitor;
+
+import myparser.Token;
 import visitor.TypeVisitor;
+import visitor.Visitor;
 
 public class IntArrayType extends Type {
-  public void accept(Visitor v) {
-    v.visit(this);
-  }
+    public IntArrayType(Token token) {
+        super(token);
+        // TODO Auto-generated constructor stub
+    }
 
-  public Type accept(TypeVisitor v) {
-    return v.visit(this);
-  }
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
+
+    public Type accept(TypeVisitor v) {
+        return v.visit(this);
+    }
 }

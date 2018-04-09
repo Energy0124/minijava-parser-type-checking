@@ -422,9 +422,9 @@ public class PrettyPrintVisitor implements Visitor {
         n.s.accept(this);
     }
 
-	@Override
-	public void visit(DoubleType n) {
-		 System.out.print("double");
+    @Override
+    public void visit(DoubleType n) {
+        System.out.print("double");
 
-	}
+    }
 }

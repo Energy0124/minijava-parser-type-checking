@@ -1,23 +1,26 @@
 package syntaxtree;
 
+import myparser.Token;
+
 import java.util.Vector;
 
-public class MethodDeclList {
-   private Vector<MethodDecl> list;
+public class MethodDeclList extends ASTNode{
+    private Vector<MethodDecl> list;
 
-   public MethodDeclList() {
-      list = new Vector<MethodDecl>();
-   }
+    public MethodDeclList(Token token) {
+        super(token);
+        list = new Vector<MethodDecl>();
+    }
 
-   public void addElement(MethodDecl n) {
-      list.addElement(n);
-   }
+    public void addElement(MethodDecl n) {
+        list.addElement(n);
+    }
 
-   public MethodDecl elementAt(int i)  { 
-      return (MethodDecl)list.elementAt(i); 
-   }
+    public MethodDecl elementAt(int i) {
+        return (MethodDecl) list.elementAt(i);
+    }
 
-   public int size() { 
-      return list.size(); 
-   }
+    public int size() {
+        return list.size();
+    }
 }
