@@ -48,7 +48,8 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         // this is an ugly hack.. but its not worth having a Void and
         // String[] type just for one occourance
         currMethod = new Method("main", new IdentifierType("void", n.token));
-        currMethod.addVar(n.i2.toString(), new IdentifierType("String[]", n.token));
+//        currMethod.addVar(n.i2.toString(), new IdentifierType("String[]", n.token));
+        currMethod.addVar(n.i2, new IdentifierType("String[]", n.token));
         n.s.accept(this);
 
         currMethod = null;
@@ -62,11 +63,12 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
     public Type visit(ClassDeclSimple n) {
         if (!symbolTable.addClass(n.i, null)) {
 
-            System.out.println("Class " + n.i.toString() + "is already defined");
+//            System.out.println("Class " + n.i.toString() + "is already defined");
             System.out.println(n.i.toString() + ": Redeclaration ( Line " + symbolTable.getClass(n.i.toString()).identifier.token.beginLine
                     + " Column " + symbolTable.getClass(n.i.toString()).identifier.token.beginColumn +
                     " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
-            System.exit(-1);
+            return null;
+//            System.exit(-1);
         }
 
         // Entering a new class scope (no need to explicitly leave a class scope)
@@ -89,9 +91,13 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
     // VarDeclList vl; (Field declaration)
     // MethodDeclList ml; (Method declaration)
     public Type visit(ClassDeclExtends n) {
-        if (!symbolTable.addClass(n.i.toString(), n.j.toString())) {
-            System.out.println("Class " + n.i.toString() + "is already defined");
-            System.exit(-1);
+        if (!symbolTable.addClass(n.i, n.j.toString())) {
+//            System.out.println("Class " + n.i.toString() + "is already defined");
+//            System.exit(-1);
+            System.out.println(n.i.toString() + ": Redeclaration ( Line " + symbolTable.getClass(n.i.toString()).identifier.token.beginLine
+                    + " Column " + symbolTable.getClass(n.i.toString()).identifier.token.beginColumn +
+                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            return null;
         }
 
         // Entering a new class scope (no need to explicitly leave a class scope)
@@ -119,15 +125,23 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         if (currMethod == null) {
 
             // Add a field
-            if (!currClass.addVar(id, t)) {
-                System.out.println(id + "is already defined in " + currClass.getId());
-                System.exit(-1);
+            if (!currClass.addVar(n.i, t)) {
+//                System.out.println(id + "is already defined in " + currClass.getId());
+//                System.exit(-1);
+                System.out.println(n.i.toString() + ": Redeclaration ( Line " + currClass.getVar(n.i.toString()).identifier.token.beginLine
+                        + " Column " + currClass.getVar(n.i.toString()).identifier.token.beginColumn +
+                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                return null;
             }
         } else {
             // Add a local variable
-            if (!currMethod.addVar(id, t)) {
-                System.out.println(id + "is already defined in " + currClass.getId() + "." + currMethod.getId());
-                System.exit(-1);
+            if (!currMethod.addVar(n.i, t)) {
+//                System.out.println(id + "is already defined in " + currClass.getId() + "." + currMethod.getId());
+//                System.exit(-1);
+                System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getVar(n.i.toString()).identifier.token.beginLine
+                        + " Column " + currMethod.getVar(n.i.toString()).identifier.token.beginColumn +
+                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                return null;
             }
         }
         return null;
@@ -145,9 +159,13 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         Type t = n.t.accept(this);
         String id = n.i.toString();
 
-        if (!currClass.addMethod(id, t)) {
-            System.out.println("Method " + id + "is already defined in " + currClass.getId());
-            System.exit(-1);
+        if (!currClass.addMethod(n.i, t)) {
+//            System.out.println("Method " + id + "is already defined in " + currClass.getId());
+//            System.exit(-1);
+            System.out.println(n.i.toString() + ": Redeclaration ( Line " + currClass.getMethod(n.i.toString()).identifier.token.beginLine
+                    + " Column " + currClass.getMethod(n.i.toString()).identifier.token.beginColumn +
+                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            return null;
         }
 
         // Entering a method scope
@@ -179,9 +197,13 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         Type t = n.t.accept(this);
         String id = n.i.toString();
 
-        if (!currMethod.addParam(id, t)) {
-            System.out.println("Formal" + id + "is already defined in " + currClass.getId() + "." + currMethod.getId());
-            System.exit(-1);
+        if (!currMethod.addParam(n.i, t)) {
+//            System.out.println("Formal" + id + "is already defined in " + currClass.getId() + "." + currMethod.getId());
+//            System.exit(-1);
+            System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getParam(n.i.toString()).identifier.token.beginLine
+                    + " Column " + currMethod.getParam(n.i.toString()).identifier.token.beginColumn +
+                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            return null;
         }
         return null;
     }

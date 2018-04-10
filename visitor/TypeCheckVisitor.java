@@ -78,20 +78,23 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
         n.t.accept(this);
         String id = n.i.toString();
         currMethod = currClass.getMethod(id);
-        Type retType = currMethod.type();
-        for (int i = 0; i < n.fl.size(); i++) {
-            n.fl.elementAt(i).accept(this);
+        if (currMethod != null) {
+            Type retType = currMethod.type();
+            for (int i = 0; i < n.fl.size(); i++) {
+                n.fl.elementAt(i).accept(this);
+            }
+            for (int i = 0; i < n.vl.size(); i++) {
+                n.vl.elementAt(i).accept(this);
+            }
+            for (int i = 0; i < n.sl.size(); i++) {
+                n.sl.elementAt(i).accept(this);
+            }
+            if (symbolTable.compareTypes(retType, n.e.accept(new TypeCheckExpVisitor())) == false) {
+                System.out.println("Wrong return type for method " + id);
+                System.exit(0);
+            }
         }
-        for (int i = 0; i < n.vl.size(); i++) {
-            n.vl.elementAt(i).accept(this);
-        }
-        for (int i = 0; i < n.sl.size(); i++) {
-            n.sl.elementAt(i).accept(this);
-        }
-        if (symbolTable.compareTypes(retType, n.e.accept(new TypeCheckExpVisitor())) == false) {
-            System.out.println("Wrong return type for method " + id);
-            System.exit(0);
-        }
+
     }
 
     // Type t;

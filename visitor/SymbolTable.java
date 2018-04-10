@@ -1,6 +1,5 @@
 package visitor;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import myparser.Token;
 import syntaxtree.*;
 
@@ -216,6 +215,15 @@ class Class {
         }
     }
 
+    public boolean addMethod(Identifier identifier, Type type) {
+        if (containsMethod(identifier.s))
+            return false;
+        else {
+            methods.put(identifier.s, new Method(identifier, type));
+            return true;
+        }
+    }
+
     // Enumeration of method names
     public Enumeration getMethods() {
         return methods.keys();
@@ -236,6 +244,15 @@ class Class {
             return false;
         else {
             fields.put(id, new Variable(id, type));
+            return true;
+        }
+    }
+
+    public boolean addVar(Identifier identifier, Type type) {
+        if (fields.containsKey(identifier.s))
+            return false;
+        else {
+            fields.put(identifier.s, new Variable(identifier, type));
             return true;
         }
     }
@@ -264,11 +281,18 @@ class Class {
 // Store all properties that describe a variable
 class Variable {
 
+    Identifier identifier;
     String id;
     Type type;
 
     public Variable(String id, Type type) {
         this.id = id;
+        this.type = type;
+    }
+
+    public Variable(Identifier identifier, Type type) {
+        this.identifier = identifier;
+        this.id = identifier.s;
         this.type = type;
     }
 
@@ -285,6 +309,7 @@ class Variable {
 // Store all properties that describe a variable
 class Method {
 
+    Identifier identifier;
     String id;  // Method name
     Type type;  // Return type
     Vector<Variable> params;          // Formal parameters
@@ -295,6 +320,11 @@ class Method {
         this.type = type;
         params = new Vector<Variable>();
         vars = new Hashtable<String, Variable>();
+    }
+
+    public Method(Identifier identifier, Type type) {
+        this(identifier.s, type);
+        this.identifier = identifier;
     }
 
     public String getId() {
@@ -312,6 +342,14 @@ class Method {
             return false;
         else {
             params.addElement(new Variable(id, type));
+            return true;
+        }
+    }
+    public boolean addParam(Identifier identifier, Type type) {
+        if (containsParam(identifier.s))
+            return false;
+        else {
+            params.addElement(new Variable(identifier, type));
             return true;
         }
     }
@@ -335,6 +373,15 @@ class Method {
             return false;
         else {
             vars.put(id, new Variable(id, type));
+            return true;
+        }
+    }
+
+    public boolean addVar(Identifier identifier, Type type) {
+        if (vars.containsKey(identifier.s))
+            return false;
+        else {
+            vars.put(identifier.s, new Variable(identifier, type));
             return true;
         }
     }
