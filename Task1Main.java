@@ -2,6 +2,7 @@ import myparser.MiniJavaVariantParser;
 import myparser.ParseException;
 import syntaxtree.Program;
 import visitor.BuildSymbolTableVisitor;
+import visitor.ReferenceCheckVisitor;
 import visitor.TypeCheckVisitor;
 
 public class Task1Main {
@@ -33,7 +34,9 @@ public class Task1Main {
             // Build the symbol table
             BuildSymbolTableVisitor buildSymTab = new BuildSymbolTableVisitor();
             root.accept(buildSymTab);
-
+            // Ref check
+            ReferenceCheckVisitor refCheck = new ReferenceCheckVisitor(buildSymTab.getSymTab(), Y);
+            root.accept(refCheck);
             // Type check
             TypeCheckVisitor typeCheck = new TypeCheckVisitor(buildSymTab.getSymTab());
             root.accept(typeCheck);
