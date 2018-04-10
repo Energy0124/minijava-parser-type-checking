@@ -3,13 +3,24 @@ class Factorial {
         System.out.println(new Fac().ComputeFac(10));
     }
 }
+class Factorial {
 
+    public int ComputeFac(int num) {
+        int num_aux;
+        if (num < 1)
+            num_aux = 1;
+        else
+            num_aux = num * (this.ComputeFac(num - 1));
+        return num_aux;
+    }
+
+}
 class Fac {
 
     public int ComputeFac(int num) {
         int num_aux;
         if (num < 1)
-            num_aux = a + b[10];
+            num_aux = 1;
         else
             num_aux = num * (this.ComputeFac(num - 1));
         return num_aux;

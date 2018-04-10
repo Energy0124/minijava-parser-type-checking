@@ -1,5 +1,6 @@
 package visitor;
 
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import myparser.Token;
 import syntaxtree.*;
 
@@ -22,6 +23,16 @@ class SymbolTable {
             return false;
         else
             hashtable.put(id, new Class(id, parent));
+        return true;
+    }
+
+    // Register the class name and map it to a new class (with its supperclass)
+    // Return false if there is a name conflicts. Otherwise return true.
+    public boolean addClass(Identifier identifier, String parent) {
+        if (containsClass(identifier.s))
+            return false;
+        else
+            hashtable.put(identifier.s, new Class(identifier, parent));
         return true;
     }
 
@@ -153,6 +164,7 @@ class SymbolTable {
 class Class {
 
     String id;      // Class name
+    Identifier identifier;
     Hashtable<String, Method> methods;
     Hashtable<String, Variable> fields;
     String parent;  // Superclass's name  (null if there is no superclass)
@@ -167,6 +179,16 @@ class Class {
         methods = new Hashtable<String, Method>();
         fields = new Hashtable<String, Variable>();
     }
+
+    public Class(Identifier identifier, String p) {
+        this.id = identifier.s;
+        this.identifier = identifier;
+        parent = p;
+        type = new IdentifierType(id, new Token());
+        methods = new Hashtable<String, Method>();
+        fields = new Hashtable<String, Variable>();
+    }
+
 
     public Class() {
     }

@@ -1,6 +1,5 @@
 package visitor;
 
-import myparser.Token;
 import syntaxtree.*;
 
 public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
@@ -43,7 +42,7 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
     // Identifier i1 (name of class),i2 (name of argument in main();
     // Statement s;
     public Type visit(MainClass n) {
-        symbolTable.addClass(n.i1.toString(), null);
+        symbolTable.addClass(n.i1, null);
         currClass = symbolTable.getClass(n.i1.toString());
 
         // this is an ugly hack.. but its not worth having a Void and
@@ -61,9 +60,12 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
     // VarDeclList vl; (Field declaration)
     // MethodDeclList ml; (Method declaration)
     public Type visit(ClassDeclSimple n) {
-        if (!symbolTable.addClass(n.i.toString(), null)) {
+        if (!symbolTable.addClass(n.i, null)) {
 
             System.out.println("Class " + n.i.toString() + "is already defined");
+            System.out.println(n.i.toString() + ": Redeclaration ( Line " + symbolTable.getClass(n.i.toString()).identifier.token.beginLine
+                    + " Column " + symbolTable.getClass(n.i.toString()).identifier.token.beginColumn +
+                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
             System.exit(-1);
         }
 
