@@ -967,7 +967,7 @@ Exp ArrayLookup() :
   Exp e1, e2;
 }
 {
-  e1 = PrimaryExpression() "[" e2 = PrimaryExpression() "]"
+  e1 = PrimaryExpression() "[" e2 = Expression() "]"
   {
     return new ArrayLookup(e1, e2, token);
   }

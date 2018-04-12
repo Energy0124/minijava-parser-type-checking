@@ -35,7 +35,7 @@ public class Task1Main {
             BuildSymbolTableVisitor buildSymTab = new BuildSymbolTableVisitor();
             root.accept(buildSymTab);
             // Ref check
-            ReferenceCheckVisitor refCheck = new ReferenceCheckVisitor(buildSymTab.getSymTab(), Y);
+            ReferenceCheckVisitor refCheck = new ReferenceCheckVisitor(buildSymTab.getSymTab(), Y,buildSymTab.getIdRefMap());
             root.accept(refCheck);
             // Type check
             TypeCheckVisitor typeCheck = new TypeCheckVisitor(buildSymTab.getSymTab());

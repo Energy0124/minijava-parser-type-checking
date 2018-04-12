@@ -898,7 +898,7 @@ public class MiniJavaVariantParser implements MiniJavaVariantParserConstants {
   Exp e1, e2;
     e1 = PrimaryExpression();
     jj_consume_token(LBRACKET);
-    e2 = PrimaryExpression();
+    e2 = Expression();
     jj_consume_token(RBRACKET);
     {if (true) return new ArrayLookup(e1, e2, token);}
     throw new Error("Missing return statement in function");
@@ -1701,7 +1701,7 @@ public class MiniJavaVariantParser implements MiniJavaVariantParserConstants {
   static private boolean jj_3R_64() {
     if (jj_3R_27()) return true;
     if (jj_scan_token(LBRACKET)) return true;
-    if (jj_3R_27()) return true;
+    if (jj_3R_58()) return true;
     if (jj_scan_token(RBRACKET)) return true;
     return false;
   }

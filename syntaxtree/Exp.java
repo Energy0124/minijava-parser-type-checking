@@ -7,7 +7,6 @@ import visitor.Visitor;
 public abstract class Exp extends ASTNode {
     public Exp(Token token) {
         super(token);
-        // TODO Auto-generated constructor stub
     }
 
     public abstract void accept(Visitor v);

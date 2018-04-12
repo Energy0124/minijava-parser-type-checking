@@ -1,6 +1,6 @@
 package syntaxtree;
 
-import com.sun.corba.se.impl.oa.toa.TOA;
+
 import myparser.Token;
 import visitor.TypeVisitor;
 import visitor.Visitor;

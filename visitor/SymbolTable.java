@@ -12,6 +12,14 @@ import java.util.stream.Collectors;
 class SymbolTable {
     private Hashtable<String, Class> hashtable;
 
+    public Hashtable<String, Class> getHashtable() {
+        return hashtable;
+    }
+
+    public void setHashtable(Hashtable<String, Class> hashtable) {
+        this.hashtable = hashtable;
+    }
+
     public SymbolTable() {
         hashtable = new Hashtable<String, Class>();
     }
@@ -28,11 +36,11 @@ class SymbolTable {
 
     // Register the class name and map it to a new class (with its supperclass)
     // Return false if there is a name conflicts. Otherwise return true.
-    public boolean addClass(Identifier identifier, String parent) {
+    public boolean addClass(Identifier identifier, Identifier parentIdentifier) {
         if (containsClass(identifier.s))
             return false;
         else
-            hashtable.put(identifier.s, new Class(identifier, parent));
+            hashtable.put(identifier.s, new Class(identifier, parentIdentifier));
         return true;
     }
 
@@ -163,6 +171,7 @@ class SymbolTable {
 // Store all properties that describe a class
 class Class {
 
+    Identifier parentIdentifier;
     String id;      // Class name
     Identifier identifier;
     Hashtable<String, Method> methods;
@@ -184,6 +193,20 @@ class Class {
         this.id = identifier.s;
         this.identifier = identifier;
         parent = p;
+        type = new IdentifierType(id, new Token());
+        methods = new Hashtable<String, Method>();
+        fields = new Hashtable<String, Variable>();
+    }
+
+    public Class(Identifier identifier, Identifier parentIdentifier) {
+        this.id = identifier.s;
+        this.identifier = identifier;
+        this.parentIdentifier = parentIdentifier;
+        if (parentIdentifier != null) {
+            parent = parentIdentifier.s;
+        } else {
+            parent = null;
+        }
         type = new IdentifierType(id, new Token());
         methods = new Hashtable<String, Method>();
         fields = new Hashtable<String, Variable>();
