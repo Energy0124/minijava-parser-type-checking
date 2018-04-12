@@ -6,6 +6,7 @@ import syntaxtree.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 // The global Symbol Table that maps class name to Class
 class SymbolTable {
@@ -345,6 +346,7 @@ class Method {
             return true;
         }
     }
+
     public boolean addParam(Identifier identifier, Type type) {
         if (containsParam(identifier.s))
             return false;
@@ -413,6 +415,16 @@ class Method {
         return null;
     }
 
+    public String getParamAsString() {
+//        StringBuilder stringBuilder = new StringBuilder();
+        return params.stream().map(variable -> variable.type + " " + variable.id).collect(Collectors.joining(", "));
+//        for (Variable var : params) {
+//            stringBuilder.append(var.type.token.image);
+//            stringBuilder.append(" ");
+//            stringBuilder.append(var.id);
+//
+//        }
+    }
 } // Method
 
 

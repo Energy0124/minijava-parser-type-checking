@@ -7,7 +7,7 @@ import visitor.Visitor;
 public class IntArrayType extends Type {
     public IntArrayType(Token token) {
         super(token);
-        // TODO Auto-generated constructor stub
+
     }
 
     public void accept(Visitor v) {
@@ -16,5 +16,10 @@ public class IntArrayType extends Type {
 
     public Type accept(TypeVisitor v) {
         return v.visit(this);
+    }
+
+    @Override
+    public String toString() {
+        return "int []";
     }
 }

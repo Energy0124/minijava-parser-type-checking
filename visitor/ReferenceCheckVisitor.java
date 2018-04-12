@@ -46,21 +46,7 @@ public class ReferenceCheckVisitor extends DepthFirstVisitor {
         currClass = symbolTable.getClass(i1);
         int idRef = addToIdRefMap(currClass);
         if (idRef >= 0) {
-            if (currClass.id.equals(Y)) {
-                System.out.print(idRef + ", " + currClass.id);
-
-                if (currClass.parent != null) {
-                    Class parentClass = symbolTable.getClass(currClass.parent);
-                    System.out.print(", " + parentClass.id);
-
-                    while (parentClass.parent != null) {
-                        parentClass = symbolTable.getClass(parentClass.parent);
-                        System.out.print(", " + parentClass.id);
-                    }
-
-                }
-                System.out.println();
-            }
+            printClassInfo(idRef);
 
             n.i2.accept(this);
             n.s.accept(this);
@@ -73,13 +59,15 @@ public class ReferenceCheckVisitor extends DepthFirstVisitor {
     public void visit(ClassDeclSimple n) {
         String id = n.i.toString();
         currClass = symbolTable.getClass(id);
-        addToIdRefMap(currClass);
-
-        for (int i = 0; i < n.vl.size(); i++) {
-            n.vl.elementAt(i).accept(this);
-        }
-        for (int i = 0; i < n.ml.size(); i++) {
-            n.ml.elementAt(i).accept(this);
+        int idRef = addToIdRefMap(currClass);
+        if (idRef >= 0) {
+            printClassInfo(idRef);
+            for (int i = 0; i < n.vl.size(); i++) {
+                n.vl.elementAt(i).accept(this);
+            }
+            for (int i = 0; i < n.ml.size(); i++) {
+                n.ml.elementAt(i).accept(this);
+            }
         }
     }
 
@@ -90,14 +78,34 @@ public class ReferenceCheckVisitor extends DepthFirstVisitor {
     public void visit(ClassDeclExtends n) {
         String id = n.i.toString();
         currClass = symbolTable.getClass(id);
-        addToIdRefMap(currClass);
-
-        n.j.accept(this);
-        for (int i = 0; i < n.vl.size(); i++) {
-            n.vl.elementAt(i).accept(this);
+        int idRef = addToIdRefMap(currClass);
+        if (idRef >= 0) {
+            printClassInfo(idRef);
+            n.j.accept(this);
+            for (int i = 0; i < n.vl.size(); i++) {
+                n.vl.elementAt(i).accept(this);
+            }
+            for (int i = 0; i < n.ml.size(); i++) {
+                n.ml.elementAt(i).accept(this);
+            }
         }
-        for (int i = 0; i < n.ml.size(); i++) {
-            n.ml.elementAt(i).accept(this);
+    }
+
+    private void printClassInfo(int idRef) {
+        if (currClass.id.equals(Y)) {
+            System.out.print(idRef + ", Class");
+
+            if (currClass.parent != null) {
+                Class parentClass = symbolTable.getClass(currClass.parent);
+                System.out.print(", " + parentClass.id);
+
+                while (parentClass.parent != null) {
+                    parentClass = symbolTable.getClass(parentClass.parent);
+                    System.out.print(", " + parentClass.id);
+                }
+
+            }
+            System.out.println();
         }
     }
 
@@ -112,9 +120,20 @@ public class ReferenceCheckVisitor extends DepthFirstVisitor {
             var = currClass.getVar(n.i.s);
 
         }
-        addToIdRefMap(var);
-        n.t.accept(this);
-        //n.i.accept(this);
+        int idRef = addToIdRefMap(var);
+        if (idRef >= 0) {
+            if (var.id.equals(Y)) {
+                if (currMethod != null) {
+                    System.out.println(idRef + ", Local, " + var.type + ", " + currClass.id + "::" + currMethod.id + "("+currMethod.getParamAsString()+")");
+                } else {
+                    System.out.println(idRef + ", Data member, " + var.type + ", " + currClass.id);
+
+                }
+            }
+            n.t.accept(this);
+            n.i.accept(this);
+        }
+
     }
 
     // Type t;
@@ -130,17 +149,24 @@ public class ReferenceCheckVisitor extends DepthFirstVisitor {
 
 
         if (currMethod != null) {
-            addToIdRefMap(currMethod);
-            for (int i = 0; i < n.fl.size(); i++) {
-                n.fl.elementAt(i).accept(this);
+            int idRef = addToIdRefMap(currMethod);
+
+            if (idRef >= 0) {
+                if (currMethod.id.equals(Y)) {
+                    System.out.println(idRef + ", " + currClass.id + ", " + currMethod.type + " (" + currMethod.getParamAsString() + ")");
+                }
+
+                for (int i = 0; i < n.fl.size(); i++) {
+                    n.fl.elementAt(i).accept(this);
+                }
+                for (int i = 0; i < n.vl.size(); i++) {
+                    n.vl.elementAt(i).accept(this);
+                }
+                for (int i = 0; i < n.sl.size(); i++) {
+                    n.sl.elementAt(i).accept(this);
+                }
+                n.e.accept(this);
             }
-            for (int i = 0; i < n.vl.size(); i++) {
-                n.vl.elementAt(i).accept(this);
-            }
-            for (int i = 0; i < n.sl.size(); i++) {
-                n.sl.elementAt(i).accept(this);
-            }
-            n.e.accept(this);
         }
         currMethod = null;
 
