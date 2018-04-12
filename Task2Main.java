@@ -5,7 +5,7 @@ import visitor.BuildSymbolTableVisitor;
 import visitor.ReferenceCheckVisitor;
 import visitor.TypeCheckVisitor;
 
-public class Task1Main {
+public class Task2Main {
     public static void main(String[] args) {
         MiniJavaVariantParser parser;
         if (args.length == 1) {
@@ -23,9 +23,9 @@ public class Task1Main {
             }
         } else {
             System.out.println("MiniJavaVariantParser:  Usage is one of:");
-            System.out.println("         java Task1Main Y < inputfile");
+            System.out.println("         java Task2Main Y < inputfile");
             System.out.println("OR");
-            System.out.println("         java Task1Main Y inputfile");
+            System.out.println("         java Task2Main Y inputfile");
             return;
         }
         try {
@@ -33,13 +33,14 @@ public class Task1Main {
             Program root = parser.Goal();
             // Build the symbol table
             BuildSymbolTableVisitor buildSymTab = new BuildSymbolTableVisitor();
+            buildSymTab.setPrintError(false);
             root.accept(buildSymTab);
             // Ref check
-            ReferenceCheckVisitor refCheck = new ReferenceCheckVisitor(buildSymTab.getSymTab(), Y,buildSymTab.getIdRefMap());
-            root.accept(refCheck);
+//            ReferenceCheckVisitor refCheck = new ReferenceCheckVisitor(buildSymTab.getSymTab(), Y,buildSymTab.getIdRefMap());
+//            root.accept(refCheck);
             // Type check
-//            TypeCheckVisitor typeCheck = new TypeCheckVisitor(buildSymTab.getSymTab());
-//            root.accept(typeCheck);
+            TypeCheckVisitor typeCheck = new TypeCheckVisitor(buildSymTab.getSymTab());
+            root.accept(typeCheck);
 
         } catch (ParseException e) {
             System.out.println(e.toString());

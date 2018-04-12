@@ -21,6 +21,16 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         }
     }
 
+    boolean printError = true;
+
+    public boolean isPrintError() {
+        return printError;
+    }
+
+    public void setPrintError(boolean printError) {
+        this.printError = printError;
+    }
+
     // In global scope => both currClass and currMethod are null
     // Contains class declaration
     // Inside a class (but not in a method) => currMethod is null
@@ -124,9 +134,11 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         if (!symbolTable.addClass(n.i, null)) {
 
 //            System.out.println("Class " + n.i.toString() + "is already defined");
-            System.out.println(n.i.toString() + ": Redeclaration ( Line " + symbolTable.getClass(n.i.toString()).identifier.token.beginLine
-                    + " Column " + symbolTable.getClass(n.i.toString()).identifier.token.beginColumn +
-                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            if (printError) {
+                System.out.println(n.i.toString() + ": Redeclaration ( Line " + symbolTable.getClass(n.i.toString()).identifier.token.beginLine
+                        + " Column " + symbolTable.getClass(n.i.toString()).identifier.token.beginColumn +
+                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            }
             return null;
 //            System.exit(-1);
         }
@@ -155,9 +167,11 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         if (!symbolTable.addClass(n.i, n.j)) {
 //            System.out.println("Class " + n.i.toString() + "is already defined");
 //            System.exit(-1);
-            System.out.println(n.i.toString() + ": Redeclaration ( Line " + symbolTable.getClass(n.i.toString()).identifier.token.beginLine
-                    + " Column " + symbolTable.getClass(n.i.toString()).identifier.token.beginColumn +
-                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            if (printError) {
+                System.out.println(n.i.toString() + ": Redeclaration ( Line " + symbolTable.getClass(n.i.toString()).identifier.token.beginLine
+                        + " Column " + symbolTable.getClass(n.i.toString()).identifier.token.beginColumn +
+                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            }
             return null;
         }
 
@@ -190,9 +204,11 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
             if (!currClass.addVar(n.i, t)) {
 //                System.out.println(id + "is already defined in " + currClass.getId());
 //                System.exit(-1);
-                System.out.println(n.i.toString() + ": Redeclaration ( Line " + currClass.getVar(n.i.toString()).identifier.token.beginLine
-                        + " Column " + currClass.getVar(n.i.toString()).identifier.token.beginColumn +
-                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                if (printError) {
+                    System.out.println(n.i.toString() + ": Redeclaration ( Line " + currClass.getVar(n.i.toString()).identifier.token.beginLine
+                            + " Column " + currClass.getVar(n.i.toString()).identifier.token.beginColumn +
+                            " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                }
                 return null;
             }
             int idRef = addToIdRefMap(currClass.getVar(n.i.s));
@@ -203,13 +219,17 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
 //                System.out.println(id + "is already defined in " + currClass.getId() + "." + currMethod.getId());
 //                System.exit(-1);
                 if (currMethod.getVar(n.i.toString()) != null) {
-                    System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getVar(n.i.toString()).identifier.token.beginLine
-                            + " Column " + currMethod.getVar(n.i.toString()).identifier.token.beginColumn +
-                            " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                    if (printError) {
+                        System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getVar(n.i.toString()).identifier.token.beginLine
+                                + " Column " + currMethod.getVar(n.i.toString()).identifier.token.beginColumn +
+                                " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                    }
                 } else {
-                    System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getParam(n.i.toString()).identifier.token.beginLine
-                            + " Column " + currMethod.getParam(n.i.toString()).identifier.token.beginColumn +
-                            " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                    if (printError) {
+                        System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getParam(n.i.toString()).identifier.token.beginLine
+                                + " Column " + currMethod.getParam(n.i.toString()).identifier.token.beginColumn +
+                                " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                    }
                 }
                 return null;
             }
@@ -234,9 +254,11 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         if (!currClass.addMethod(n.i, t)) {
 //            System.out.println("Method " + id + "is already defined in " + currClass.getId());
 //            System.exit(-1);
-            System.out.println(n.i.toString() + ": Redeclaration ( Line " + currClass.getMethod(n.i.toString()).identifier.token.beginLine
-                    + " Column " + currClass.getMethod(n.i.toString()).identifier.token.beginColumn +
-                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            if (printError) {
+                System.out.println(n.i.toString() + ": Redeclaration ( Line " + currClass.getMethod(n.i.toString()).identifier.token.beginLine
+                        + " Column " + currClass.getMethod(n.i.toString()).identifier.token.beginColumn +
+                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            }
             return null;
         }
 
@@ -274,9 +296,11 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
         if (!currMethod.addParam(n.i, t)) {
 //            System.out.println("Formal" + id + "is already defined in " + currClass.getId() + "." + currMethod.getId());
 //            System.exit(-1);
-            System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getParam(n.i.toString()).identifier.token.beginLine
-                    + " Column " + currMethod.getParam(n.i.toString()).identifier.token.beginColumn +
-                    " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            if (printError) {
+                System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getParam(n.i.toString()).identifier.token.beginLine
+                        + " Column " + currMethod.getParam(n.i.toString()).identifier.token.beginColumn +
+                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+            }
             return null;
         }
         int idRef = addToIdRefMap(currMethod.getParam(n.i.s));
