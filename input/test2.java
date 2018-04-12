@@ -21,8 +21,9 @@ class Factorial {
 class Fac {
     int a;
     int a;
+    double ddd;
 //    int num;
-    public int ComputeFac() {
+    public int ComputeFac(int num, int b, int[] c, double d) {
         int num;
         Factorial t;
         int a;
@@ -50,7 +51,7 @@ class Fac {
         return num_aux;
     }
 
-    public int ComputeFac(int num) {
+    public int ComputeFac(int num, int a, int c) {
         int num_aux;
         if (num < 1)
             num_aux = 1;

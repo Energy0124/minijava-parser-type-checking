@@ -120,19 +120,22 @@ public class ReferenceCheckVisitor extends DepthFirstVisitor {
             var = currClass.getVar(n.i.s);
 
         }
-        int idRef = addToIdRefMap(var);
-        if (idRef >= 0) {
-            if (var.id.equals(Y)) {
-                if (currMethod != null) {
-                    System.out.println(idRef + ", Local, " + var.type + ", " + currClass.id + "::" + currMethod.id + "("+currMethod.getParamAsString()+")");
-                } else {
-                    System.out.println(idRef + ", Data member, " + var.type + ", " + currClass.id);
+        if (var != null) {
+            int idRef = addToIdRefMap(var);
+            if (idRef >= 0) {
+                if (var.id.equals(Y)) {
+                    if (currMethod != null) {
+                        System.out.println(idRef + ", Local, " + var.type + ", " + currClass.id + "::" + currMethod.id + "(" + currMethod.getParamAsString() + ")");
+                    } else {
+                        System.out.println(idRef + ", Data member, " + var.type + ", " + currClass.id);
 
+                    }
                 }
+                n.t.accept(this);
+                n.i.accept(this);
             }
-            n.t.accept(this);
-            n.i.accept(this);
         }
+
 
     }
 
@@ -176,15 +179,22 @@ public class ReferenceCheckVisitor extends DepthFirstVisitor {
     // Identifier i;
     public void visit(Formal n) {
         Variable param = currMethod.getParam(n.i.s);
-        addToIdRefMap(param);
-        n.t.accept(this);
-//        n.i.accept(this);
+        int idRef = addToIdRefMap(param);
+        if (idRef >= 0) {
+            if (param.id.equals(Y)) {
+                System.out.println(idRef + ", Param, " + param.type + ", " + currClass.id + "::" + currMethod.id + "(" + currMethod.getParamAsString() + ")");
+            }
+            n.t.accept(this);
+            n.i.accept(this);
+        }
+
+
     }
 
     @Override
     public void visit(Call n) {
         n.e.accept(this);
-//        n.i.accept(this);
+        n.i.accept(this);
         for (int i = 0; i < n.el.size(); i++) {
             n.el.elementAt(i).accept(this);
         }

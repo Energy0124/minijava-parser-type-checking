@@ -371,7 +371,7 @@ class Method {
     // Add a local variable
     // Return false if there is a name conflict
     public boolean addVar(String id, Type type) {
-        if (vars.containsKey(id))
+        if (vars.containsKey(id) || getParam(id) != null)
             return false;
         else {
             vars.put(id, new Variable(id, type));
@@ -380,7 +380,7 @@ class Method {
     }
 
     public boolean addVar(Identifier identifier, Type type) {
-        if (vars.containsKey(identifier.s))
+        if (vars.containsKey(identifier.s) || getParam(identifier.s) != null)
             return false;
         else {
             vars.put(identifier.s, new Variable(identifier, type));

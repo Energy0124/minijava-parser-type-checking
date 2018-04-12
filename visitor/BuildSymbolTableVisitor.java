@@ -138,9 +138,15 @@ public class BuildSymbolTableVisitor extends TypeDepthFirstVisitor {
             if (!currMethod.addVar(n.i, t)) {
 //                System.out.println(id + "is already defined in " + currClass.getId() + "." + currMethod.getId());
 //                System.exit(-1);
-                System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getVar(n.i.toString()).identifier.token.beginLine
-                        + " Column " + currMethod.getVar(n.i.toString()).identifier.token.beginColumn +
-                        " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                if (currMethod.getVar(n.i.toString())!=null) {
+                    System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getVar(n.i.toString()).identifier.token.beginLine
+                            + " Column " + currMethod.getVar(n.i.toString()).identifier.token.beginColumn +
+                            " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                }else {
+                    System.out.println(n.i.toString() + ": Redeclaration ( Line " + currMethod.getParam(n.i.toString()).identifier.token.beginLine
+                            + " Column " + currMethod.getParam(n.i.toString()).identifier.token.beginColumn +
+                            " and Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+                }
                 return null;
             }
         }
