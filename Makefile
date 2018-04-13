@@ -15,11 +15,11 @@ VISITOR_CLASS = $(VISITOR:.java=.class)
 
 
 
-all: Task2.class Task3.class
+all: Task1Main.class Task2Main.class
 
-Task2.class: Task2.java $(PARSER)
+Task1Main.class: Task1Main.java $(PARSER)
 
-Task3.class: Task3.java $(PARSER)
+Task2Main.class: Task2Main.java $(PARSER)
 
 %.class: %.java
 	javac $(JAVAC_OPTIONS) $<
@@ -34,9 +34,9 @@ clean:
 	rm -rf $(JAVACC_OUTDIR) *.class
 	rm -f syntaxtree/*.class visitor/*.class
 
-task2:
-	java Task2 < input/Test.java
+task1:
+	java Task1Main num < input/test1.java
 
-task3:
-	java Task3 < input/Test.java
+task2:
+	java Task2Main < input/test2.java
 

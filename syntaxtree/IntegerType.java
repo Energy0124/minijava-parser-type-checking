@@ -7,7 +7,11 @@ import visitor.Visitor;
 public class IntegerType extends Type {
     public IntegerType(Token token) {
         super(token);
-        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public String toString() {
+        return "int";
     }
 
     public void accept(Visitor v) {

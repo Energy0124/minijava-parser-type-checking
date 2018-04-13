@@ -8,28 +8,28 @@ import visitor.TypeCheckVisitor;
 public class Task2Main {
     public static void main(String[] args) {
         MiniJavaVariantParser parser;
-        if (args.length == 1) {
+        if (args.length == 0) {
             // System.out.println("MiniJavaVariantParser: Reading from standard input . .
             // .");
             parser = new MiniJavaVariantParser(System.in);
-        } else if (args.length == 2) {
+        } else if (args.length == 1) {
             // System.out.println("MiniJavaVariantParser: Reading from file " + args[0] + "
             // . . .");
             try {
-                parser = new MiniJavaVariantParser(new java.io.FileInputStream(args[1]));
+                parser = new MiniJavaVariantParser(new java.io.FileInputStream(args[0]));
             } catch (java.io.FileNotFoundException e) {
-                System.out.println("MiniJavaVariantParser:  File " + args[1] + " not found.");
+                System.out.println("MiniJavaVariantParser:  File " + args[0] + " not found.");
                 return;
             }
         } else {
             System.out.println("MiniJavaVariantParser:  Usage is one of:");
-            System.out.println("         java Task2Main Y < inputfile");
+            System.out.println("         java Task2Main < inputfile");
             System.out.println("OR");
-            System.out.println("         java Task2Main Y inputfile");
+            System.out.println("         java Task2Main inputfile");
             return;
         }
         try {
-            String Y = args[0];
+//            String Y = args[0];
             Program root = parser.Goal();
             // Build the symbol table
             BuildSymbolTableVisitor buildSymTab = new BuildSymbolTableVisitor();

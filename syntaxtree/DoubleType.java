@@ -7,7 +7,12 @@ import visitor.Visitor;
 public class DoubleType extends Type {
     public DoubleType(Token token) {
         super(token);
-        // TODO Auto-generated constructor stub
+
+    }
+
+    @Override
+    public String toString() {
+        return "double";
     }
 
     public void accept(Visitor v) {

@@ -153,6 +153,8 @@ class SymbolTable {
             return true;
         if (t1 instanceof DoubleType && t2 instanceof IntegerType)
             return true;
+        if (t1 instanceof DoubleType && t2 instanceof DoubleType)
+            return true;
 
         // If both are classes
         if (t1 instanceof IdentifierType && t2 instanceof IdentifierType) {

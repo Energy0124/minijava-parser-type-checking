@@ -140,7 +140,7 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
         Type t2 = n.e.accept(new TypeCheckExpVisitor());
         if (!symbolTable.compareTypes(t1, t2)) {
 //            System.out.println("Type error in assignment to " + n.i.toString());
-            System.out.println("Wrong expression type for assignment to " + n.i.toString() + ", expecting " + t1 + ", given " + t2 + ". ( Line " + n.e.token.beginLine + " Column " + n.e.token.beginColumn + " )");
+            System.out.println("Cannot assign expression of wrong type to " + n.i.toString() + ", expecting " + t1 + ", given " + t2 + ". ( Line " + n.e.token.beginLine + " Column " + n.e.token.beginColumn + " )");
 
 //            System.exit(0);
         }
@@ -159,17 +159,19 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
 //            System.exit(-1);
         }
 
-        if (!(n.e1.accept(new TypeCheckExpVisitor()) instanceof IntegerType)) {
+        Type indexType = n.e1.accept(new TypeCheckExpVisitor());
+        if (!(indexType instanceof IntegerType)) {
 //            System.out.println("The first expression in an array assignment" +
 //                    "must be of type int");
-            System.out.println("Wrong index type for array assignment to " + n.i.toString() + ", expecting " + "int" + ", given " + n.e1.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e1.token.beginLine + " Column " + n.e1.token.beginColumn + " )");
+            System.out.println("Array index must be of type int for array assignment to " + n.i.toString() + ", expecting " + "int" + ", given " + indexType + ". ( Line " + n.e1.token.beginLine + " Column " + n.e1.token.beginColumn + " )");
 
 //            System.exit(-1);
         }
-        if (!(n.e2.accept(new TypeCheckExpVisitor()) instanceof IntegerType)) {
+        Type assignedType = n.e2.accept(new TypeCheckExpVisitor());
+        if (!(assignedType instanceof IntegerType)) {
 //            System.out.println("The second expression in an array assignment" +
 //                    "must be of type int");
-            System.out.println("Wrong expression type for array assignment to " + n.i.toString() + ", expecting " + "int" + ", given " + n.e2.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e2.token.beginLine + " Column " + n.e2.token.beginColumn + " )");
+            System.out.println("Wrong expression type for array assignment to " + n.i.toString() + ", expecting " + "int" + ", given " + assignedType + ". ( Line " + n.e2.token.beginLine + " Column " + n.e2.token.beginColumn + " )");
 
 //            System.exit(-1);
         }
