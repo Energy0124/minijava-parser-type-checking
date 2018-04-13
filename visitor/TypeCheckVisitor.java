@@ -3,7 +3,7 @@ package visitor;
 import syntaxtree.*;
 
 public class TypeCheckVisitor extends DepthFirstVisitor {
-
+    //todo: modify this
     static Class currClass;
     static Method currMethod;
     static SymbolTable symbolTable;
@@ -89,9 +89,9 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
             for (int i = 0; i < n.sl.size(); i++) {
                 n.sl.elementAt(i).accept(this);
             }
-            if (symbolTable.compareTypes(retType, n.e.accept(new TypeCheckExpVisitor())) == false) {
-                System.out.println("Wrong return type for method " + id);
-                System.exit(0);
+            if (!symbolTable.compareTypes(retType, n.e.accept(new TypeCheckExpVisitor()))) {
+                System.out.println("Wrong return type for method " + id + ", expecting " + retType + ", given " + n.e.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e.token.beginLine + " Column " + n.e.token.beginColumn + " )");
+//                System.exit(0);
             }
         }
 
@@ -108,9 +108,8 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
     // Statement s1,s2;
     public void visit(If n) {
         if (!(n.e.accept(new TypeCheckExpVisitor()) instanceof BooleanType)) {
-            System.out.println("The condition of while must be" +
-                    "of type boolean");
-            System.exit(-1);
+            System.out.println("Wrong condition type for if statement, expecting boolean, given " + n.e.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e.token.beginLine + " Column " + n.e.token.beginColumn + " )");
+//            System.exit(-1);
         }
         n.s1.accept(this);
         n.s2.accept(this);
@@ -120,9 +119,8 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
     // Statement s;
     public void visit(While n) {
         if (!(n.e.accept(new TypeCheckExpVisitor()) instanceof BooleanType)) {
-            System.out.println("The condition of while must be" +
-                    "of type boolean");
-            System.exit(-1);
+            System.out.println("Wrong condition type for while statement, expecting boolean, given " + n.e.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e.token.beginLine + " Column " + n.e.token.beginColumn + " )");
+//            System.exit(-1);
         }
         n.s.accept(this);
     }
@@ -130,9 +128,8 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
     // Exp e;
     public void visit(Print n) {
         if (!(n.e.accept(new TypeCheckExpVisitor()) instanceof IntegerType)) {
-            System.out.println("The argument of System.out.println must be" +
-                    " of type int");
-            System.exit(-1);
+            System.out.println("Wrong argument type for System.out.println(), expecting int, given " + n.e.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e.token.beginLine + " Column " + n.e.token.beginColumn + " )");
+//            System.exit(-1);
         }
     }
 
@@ -141,9 +138,11 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
     public void visit(Assign n) {
         Type t1 = symbolTable.getVarType(currMethod, currClass, n.i.toString());
         Type t2 = n.e.accept(new TypeCheckExpVisitor());
-        if (symbolTable.compareTypes(t1, t2) == false) {
-            System.out.println("Type error in assignment to " + n.i.toString());
-            System.exit(0);
+        if (!symbolTable.compareTypes(t1, t2)) {
+//            System.out.println("Type error in assignment to " + n.i.toString());
+            System.out.println("Wrong expression type for assignment to " + n.i.toString() + ", expecting " + t1 + ", given " + t2 + ". ( Line " + n.e.token.beginLine + " Column " + n.e.token.beginColumn + " )");
+
+//            System.exit(0);
         }
     }
 
@@ -153,20 +152,26 @@ public class TypeCheckVisitor extends DepthFirstVisitor {
         Type typeI = symbolTable.getVarType(currMethod, currClass, n.i.toString());
 
         if (!(typeI instanceof IntArrayType)) {
-            System.out.println("The identifier in an array assignment" +
-                    "must be of type int []");
-            System.exit(-1);
+//            System.out.println("The identifier in an array assignment" +
+//                    "must be of type int []");
+            System.out.println("Wrong variable type for array assignment, " + n.i.toString() + " is not an array, expecting " + "int []" + ", given " + typeI + ". ( Line " + n.i.token.beginLine + " Column " + n.i.token.beginColumn + " )");
+
+//            System.exit(-1);
         }
 
         if (!(n.e1.accept(new TypeCheckExpVisitor()) instanceof IntegerType)) {
-            System.out.println("The first expression in an array assignment" +
-                    "must be of type int");
-            System.exit(-1);
+//            System.out.println("The first expression in an array assignment" +
+//                    "must be of type int");
+            System.out.println("Wrong index type for array assignment to " + n.i.toString() + ", expecting " + "int" + ", given " + n.e1.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e1.token.beginLine + " Column " + n.e1.token.beginColumn + " )");
+
+//            System.exit(-1);
         }
-        if (!(n.e1.accept(new TypeCheckExpVisitor()) instanceof IntegerType)) {
-            System.out.println("The second expression in an array assignment" +
-                    "must be of type int");
-            System.exit(-1);
+        if (!(n.e2.accept(new TypeCheckExpVisitor()) instanceof IntegerType)) {
+//            System.out.println("The second expression in an array assignment" +
+//                    "must be of type int");
+            System.out.println("Wrong expression type for array assignment to " + n.i.toString() + ", expecting " + "int" + ", given " + n.e2.accept(new TypeCheckExpVisitor()) + ". ( Line " + n.e2.token.beginLine + " Column " + n.e2.token.beginColumn + " )");
+
+//            System.exit(-1);
         }
     }
 }

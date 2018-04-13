@@ -91,7 +91,7 @@ class SymbolTable {
 
         System.out.println("Variable " + id
                 + " not defined in current scope");
-        System.exit(0);    // Panic!
+//        System.exit(0);    // Panic!
         return null;
     }
 
@@ -102,7 +102,8 @@ class SymbolTable {
 
         if (c == null) {
             System.out.println("Class " + cName + " not defined");
-            System.exit(0); // Panic!
+            return null;
+//            System.exit(0); // Panic!
         }
 
         // Try to find the declared method along the class hierarchy
@@ -116,9 +117,9 @@ class SymbolTable {
             }
         }
 
-        System.out.println("Method " + id + " not defined in class " + cName);
+//        System.out.println("Method " + id + " not defined in class " + cName);
 
-        System.exit(0);
+//        System.exit(0);
         return null;
     }
 
@@ -131,9 +132,16 @@ class SymbolTable {
         return null;
     }
 
-    // Utility method to check if t1 is compatible with t2
-    // or if t1 is a subclass of t2
-    // Note: This method can be placed in another class
+
+    /**
+     * Utility method to check if t1 is compatible with t2
+     * or if t1 is a subclass of t2
+     * Note: This method can be placed in another class
+     *
+     * @param t1 expected type
+     * @param t2 input type
+     * @return true if t2 can be convert to t1, else false
+     */
     public boolean compareTypes(Type t1, Type t2) {
         if (t1 == null || t2 == null) return false;
 
@@ -142,6 +150,8 @@ class SymbolTable {
         if (t1 instanceof BooleanType && t2 instanceof BooleanType)
             return true;
         if (t1 instanceof IntArrayType && t2 instanceof IntArrayType)
+            return true;
+        if (t1 instanceof DoubleType && t2 instanceof IntegerType)
             return true;
 
         // If both are classes

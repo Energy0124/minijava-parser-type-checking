@@ -5,10 +5,10 @@ class Factorial{
 }
 
 
-class Fac2 extends Fac3 {
+class Fac2 {
 
 
-    public int ComputeFac(int num,int num) {
+    public int ComputeFac(int num) {
         int num_aux;
         if (num < 1)
             num_aux = 1;
@@ -22,7 +22,7 @@ class Fac2 extends Fac3 {
 class Fac1 extends Fac2 {
 
 
-    public int ComputeFac(int num,int num) {
+    public int ComputeFac(int num) {
         int num_aux;
         if (num < 1)
             num_aux = 1;
@@ -35,52 +35,38 @@ class Fac1 extends Fac2 {
 
 class Fac extends Fac1{
     int a;
-    int a;
     double ddd;
     int[] k;
-//    int num;
-    public int ComputeFac(int num, int b, int[] c, double d,  int[] k) {
-        int num;
-        Factorial t;
-        int a;
-        int a;
-        int num_aux;
-        int num_aux;
-        Factorial2 tt;
-        Fac tta;
+    int num;
 
-        int[] k;
-        z=y;
+    public int ComputeFac(int num, int b, int[] c, double d,  int[] k) {
+
+        Factorial t;
+        double a;
+        int num_aux;
+
+        Fac tta;
+        Fac3 ttaa;
+
         k[k[a + b+ k[k[k[a]]]] + k[b]] = k[k[a+b]];
         num = tta.ComputeFac();
+        num = tta.ComputeFac2();
         num = new Fac3();
-        a=b;
-        if (num < 1)
+        a= b;
+        b= a;
+        b[tta]= a;
+
+        while (new Fac())
+            System.out.println(tta);
+
+        if (num)
             num_aux = 1;
         else
             num_aux = num * (this.ComputeFac(num - 1));
 
-        return num_aux;
-    }
-    public int ComputeFac(int num, int num) {
-
-        int num_aux;
-        int num_aux;
-        if (num < 1)
-            num_aux = 1;
-        else
-            num_aux = num * (this.ComputeFac(num - 1));
-        return num_aux;
+        return d;
     }
 
-    public int ComputeFac(int num, int a, int c) {
-        int num_aux;
-        if (num < 1)
-            num_aux = 1;
-        else
-            num_aux = num * (this.ComputeFac(num - 1));
-        return num_aux;
-    }
 
 }
 

@@ -4,12 +4,14 @@ import myparser.Token;
 import visitor.TypeVisitor;
 import visitor.Visitor;
 
-public class IdentifierType extends Type {
+public class UndefinedType extends IdentifierType {
     public String s;
+    public String t;
 
-    public IdentifierType(String as, Token token) {
-        super(token);
+    public UndefinedType(String as, String type, Token token) {
+        super(as, token);
         s = as;
+        t = type;
     }
 
     public void accept(Visitor v) {
@@ -22,6 +24,6 @@ public class IdentifierType extends Type {
 
     @Override
     public String toString() {
-        return s;
+        return "Undefined " + t + ": " + s;
     }
 }

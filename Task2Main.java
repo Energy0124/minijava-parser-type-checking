@@ -33,7 +33,7 @@ public class Task2Main {
             Program root = parser.Goal();
             // Build the symbol table
             BuildSymbolTableVisitor buildSymTab = new BuildSymbolTableVisitor();
-            buildSymTab.setPrintError(false);
+//            buildSymTab.setPrintError(false);
             root.accept(buildSymTab);
             // Ref check
 //            ReferenceCheckVisitor refCheck = new ReferenceCheckVisitor(buildSymTab.getSymTab(), Y,buildSymTab.getIdRefMap());
