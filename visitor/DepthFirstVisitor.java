@@ -289,7 +289,6 @@ public class DepthFirstVisitor implements Visitor {
 
     @Override
     public void visit(DoubleType n) {
-        // TODO Auto-generated method stub
 
     }
 }

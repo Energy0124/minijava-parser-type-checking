@@ -3,7 +3,7 @@ package visitor;
 import syntaxtree.*;
 
 public class TypeCheckVisitor extends DepthFirstVisitor {
-    //todo: modify this
+
     static Class currClass;
     static Method currMethod;
     static SymbolTable symbolTable;
