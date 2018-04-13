@@ -23,6 +23,8 @@ a.	Instructions to run your program.
 
     To run the program, run "java Task1Main < [input.java]" or "java Task2Main < [input.java]" and replace the [input.java] with the input file.
 
+    You can also open this folder in Eclipse IDE or Intellij IDEA to run the project.
+
 b.	The assumptions you make, if any.
     I didn't implemented bonus part, so I assume that there is no method overloading in minijava.
     I also assume that there is no circular dependency in class inheritance in the source file, other it will cause infinite loop.
